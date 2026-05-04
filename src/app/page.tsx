@@ -1,65 +1,239 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { LanguageSwitch } from "./i18n/language-switch";
+import { copy, navItems, type Lang } from "./i18n/site-copy";
 
 export default function Home() {
+  const [lang, setLang] = useState<Lang>("zh");
+  const t = copy[lang];
+
+  useEffect(() => {
+    document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+  }, [lang]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+    <main className="site-grid min-h-screen overflow-hidden text-zinc-100">
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-5 sm:px-8 lg:px-10 2xl:w-[65vw] 2xl:max-w-none">
+        <header className="flex min-h-14 items-center justify-between gap-5 border-b border-white/10 py-3">
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#top"
+            className="font-mono text-sm uppercase tracking-[0.28em] text-zinc-200"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            NiceNoneCB
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          <div className="flex items-center gap-5">
+            <nav className="hidden items-center gap-7 font-mono text-xs uppercase tracking-[0.22em] text-zinc-500 md:flex">
+              {navItems.map((item) => (
+                <a
+                  className="transition hover:text-emerald-300"
+                  href={`#${item.id}`}
+                  key={item.id}
+                >
+                  {item[lang]}
+                </a>
+              ))}
+            </nav>
+            <LanguageSwitch lang={lang} setLang={setLang} />
+          </div>
+        </header>
+
+        <section
+          id="top"
+          className="grid flex-1 items-center gap-12 py-16 md:grid-cols-[1.08fr_0.92fr] md:py-20"
+        >
+          <div>
+            <p className="mb-6 font-mono text-xs uppercase tracking-[0.32em] text-emerald-300">
+              {t.eyebrow}
+            </p>
+            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] text-zinc-50 sm:text-6xl lg:text-7xl">
+              {t.headline}
+            </h1>
+            <p className="mt-7 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg">
+              {t.intro}
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a
+                className="border border-emerald-300 bg-emerald-300 px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-transparent hover:text-emerald-200"
+                href="#work"
+              >
+                {t.primaryCta}
+              </a>
+              <a
+                className="border border-white/15 px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-zinc-200 transition hover:border-zinc-100"
+                href="mailto:nicenonecb@gmail.com"
+              >
+                {t.secondaryCta}
+              </a>
+            </div>
+          </div>
+
+          <aside className="border border-white/10 bg-black/45 p-5 shadow-2xl shadow-black/40 backdrop-blur">
+            <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4 font-mono text-xs text-zinc-500">
+              <span>{t.profileTitle}</span>
+              <span className="text-emerald-300">{t.online}</span>
+            </div>
+            <dl className="space-y-5 font-mono text-sm">
+              {Object.entries(t.profile).map(([key, value]) => (
+                <div className="flex items-start justify-between gap-8" key={key}>
+                  <dt className="text-zinc-500">{key}</dt>
+                  <dd className="text-right text-zinc-200">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+        </section>
+
+        <section id="work" className="border-t border-white/10 py-14">
+          <div className="mb-7 flex items-end justify-between gap-6">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.28em] text-zinc-500">
+                {t.work.eyebrow}
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold text-zinc-100">
+                {t.work.title}
+              </h2>
+            </div>
+            <span className="hidden font-mono text-xs text-zinc-500 sm:block">
+              {t.work.count}
+            </span>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {t.work.items.map((project) => (
+              <article
+                className="border border-white/10 bg-zinc-950/60 p-5 transition hover:border-emerald-300/70"
+                key={project.name}
+              >
+                <div className="mb-8 flex items-center justify-between gap-4 font-mono text-xs">
+                  <span className="text-emerald-300">{project.type}</span>
+                  <span className="text-zinc-600">/</span>
+                </div>
+                <h3 className="text-xl font-semibold text-zinc-50">
+                  {project.name}
+                </h3>
+                <p className="mt-4 min-h-16 text-sm leading-7 text-zinc-400">
+                  {project.description}
+                </p>
+                <p className="mt-8 border-t border-white/10 pt-4 font-mono text-xs text-zinc-500">
+                  {project.stack}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="effects"
+          className="grid gap-8 border-t border-white/10 py-14 md:grid-cols-[1fr_1fr]"
+        >
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-zinc-500">
+              {t.effects.eyebrow}
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-zinc-100">
+              {t.effects.title}
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-400">
+              {t.effects.description}
+            </p>
+            <div className="mt-7 grid gap-3">
+              {t.effects.items.map((effect) => (
+                <article
+                  className="border border-white/10 bg-zinc-950/60 p-4 transition hover:border-emerald-300/70"
+                  key={effect.name}
+                >
+                  <h3 className="font-mono text-sm text-emerald-300">
+                    {effect.name}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-zinc-400">
+                    {effect.description}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="effect-stage border border-white/10 bg-black/45 p-5">
+            <div className="mb-4 flex items-center justify-between font-mono text-xs text-zinc-500">
+              <span>{t.effects.preview}</span>
+              <span className="text-emerald-300">{t.effects.live}</span>
+            </div>
+            {/* 纯 CSS 动效预览，保持首屏轻量并避免引入额外运行时。 */}
+            <div className="effect-screen">
+              <span className="effect-line effect-line-a" />
+              <span className="effect-line effect-line-b" />
+              <span className="effect-line effect-line-c" />
+              <span className="effect-cursor" />
+              <div className="effect-copy">
+                <span>motion</span>
+                <strong>responsive detail</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="writing"
+          className="grid gap-8 border-t border-white/10 py-14 md:grid-cols-[0.8fr_1.2fr]"
+        >
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-zinc-500">
+              {t.writing.eyebrow}
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-zinc-100">
+              {t.writing.title}
+            </h2>
+          </div>
+          <div className="divide-y divide-white/10 border-y border-white/10">
+            {t.writing.posts.map((post, index) => (
+              <a
+                className="flex items-center justify-between gap-6 py-5 transition hover:text-emerald-300"
+                href="#writing"
+                key={post}
+              >
+                <span className="text-zinc-200">{post}</span>
+                <span className="font-mono text-xs text-zinc-600">
+                  0{index + 1}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="todo"
+          className="grid gap-8 border-t border-white/10 py-14 md:grid-cols-[1fr_1fr]"
+        >
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-zinc-500">
+              {t.todo.eyebrow}
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-zinc-100">
+              {t.todo.title}
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-400">
+              {t.todo.description}
+            </p>
+          </div>
+          <div className="border border-white/10 bg-black/45 p-5 font-mono">
+            <div className="mb-4 flex items-center justify-between text-xs text-zinc-500">
+              <span>{t.todo.preview}</span>
+              <span className="text-amber-300">{t.todo.locked}</span>
+            </div>
+            <div className="space-y-3 text-sm">
+              {t.todo.items.map(([label, status]) => (
+                <div
+                  className="flex items-center justify-between gap-4 border border-white/10 px-4 py-3"
+                  key={label}
+                >
+                  <span className="text-zinc-300">{label}</span>
+                  <span className="text-zinc-600">{status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }
