@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { GlassHero } from "./effects/glass-hero";
 import { LanguageSwitch } from "./i18n/language-switch";
 import { copy, navItems, type Lang } from "./i18n/site-copy";
 
@@ -151,6 +153,12 @@ export default function Home() {
                 </article>
               ))}
             </div>
+            <Link
+              className="mt-6 inline-flex border border-emerald-300/70 px-4 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200 transition hover:bg-emerald-300 hover:text-black"
+              href="/effects"
+            >
+              {t.effects.openGlassHero}
+            </Link>
           </div>
 
           <div className="effect-stage border border-white/10 bg-black/45 p-5">
@@ -158,16 +166,8 @@ export default function Home() {
               <span>{t.effects.preview}</span>
               <span className="text-emerald-300">{t.effects.live}</span>
             </div>
-            {/* 纯 CSS 动效预览，保持首屏轻量并避免引入额外运行时。 */}
-            <div className="effect-screen">
-              <span className="effect-line effect-line-a" />
-              <span className="effect-line effect-line-b" />
-              <span className="effect-line effect-line-c" />
-              <span className="effect-cursor" />
-              <div className="effect-copy">
-                <span>motion</span>
-                <strong>responsive detail</strong>
-              </div>
+            <div className="min-h-[22rem] overflow-hidden">
+              <GlassHero variant="preview" />
             </div>
           </div>
         </section>

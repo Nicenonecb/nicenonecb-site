@@ -36,152 +36,270 @@ body {
   min-height: 25rem;
 }
 
-.effect-screen {
+.scramble-lab {
   position: relative;
-  min-height: 20rem;
   overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(57 255 136 / 0.2);
   background:
-    linear-gradient(90deg, rgb(57 255 136 / 0.14), transparent 42%),
-    repeating-linear-gradient(
-      0deg,
-      rgb(255 255 255 / 0.06) 0,
-      rgb(255 255 255 / 0.06) 1px,
-      transparent 1px,
-      transparent 20px
-    ),
-    #050505;
+    linear-gradient(90deg, rgb(57 255 136 / 0.09), transparent 38%),
+    linear-gradient(180deg, rgb(14 165 233 / 0.1), transparent 58%),
+    #050807;
+  font-family: var(--font-geist-mono), monospace;
 }
 
-.effect-screen::before {
+.scramble-lab::before {
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgb(255 255 255 / 0.05) 0,
+      rgb(255 255 255 / 0.05) 1px,
+      transparent 1px,
+      transparent 18px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0.035) 0,
+      rgb(255 255 255 / 0.035) 1px,
+      transparent 1px,
+      transparent 36px
+    );
+}
+
+.scramble-lab__status,
+.scramble-lab__command,
+.scramble-lab__controls,
+.scramble-lab__panel {
+  position: relative;
+  z-index: 1;
+}
+
+.scramble-lab__status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem 0;
+  color: rgb(148 163 184);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
+.scramble-lab__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: linear-gradient(135deg, #fb4779, #f4d35e 52%, #48ffa0);
+  box-shadow: 0 0 22px rgb(72 255 160 / 0.45);
+}
+
+.scramble-lab__command {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 2.3rem 1.1rem 0.75rem;
+  color: rgb(91 120 111);
+  font-size: clamp(0.72rem, 2vw, 0.95rem);
+}
+
+.scramble-lab__command strong {
+  color: #ffd86b;
+  font-weight: 700;
+}
+
+.scramble-lab__screen {
+  position: relative;
+  min-height: clamp(13rem, 33vw, 19rem);
+  overflow: hidden;
+  border-top: 1px solid rgb(56 189 248 / 0.55);
+  border-bottom: 1px solid rgb(56 189 248 / 0.35);
+  background:
+    linear-gradient(90deg, rgb(14 165 233 / 0.22), transparent 58%),
+    rgb(8 21 33 / 0.74);
+  box-shadow:
+    inset 0 0 0 1px rgb(14 165 233 / 0.28),
+    0 0 34px rgb(14 165 233 / 0.12);
+}
+
+.scramble-lab__screen::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   content: "";
   background: linear-gradient(
-    115deg,
-    transparent 0 32%,
-    rgb(57 255 136 / 0.18) 42%,
-    transparent 52% 100%
+    100deg,
+    transparent 0 28%,
+    rgb(72 255 160 / 0.17) 44%,
+    transparent 60% 100%
   );
-  animation: effect-scan 4.8s linear infinite;
+  animation: scramble-scan 4.6s linear infinite;
 }
 
-.effect-line {
+.scramble-lab__rain {
   position: absolute;
-  left: 12%;
-  height: 1px;
-  background: rgb(57 255 136 / 0.7);
-  box-shadow: 0 0 22px rgb(57 255 136 / 0.45);
-  transform-origin: left center;
-}
-
-.effect-line-a {
-  top: 28%;
-  width: 68%;
-  animation: effect-line-a 3.8s ease-in-out infinite;
-}
-
-.effect-line-b {
-  top: 50%;
-  width: 52%;
-  animation: effect-line-b 4.4s ease-in-out infinite;
-}
-
-.effect-line-c {
-  top: 72%;
-  width: 76%;
-  animation: effect-line-c 4s ease-in-out infinite;
-}
-
-.effect-cursor {
-  position: absolute;
-  top: 34%;
-  left: 58%;
-  width: 4.5rem;
-  height: 4.5rem;
-  border: 1px solid rgb(57 255 136 / 0.85);
-  background:
-    linear-gradient(rgb(57 255 136 / 0.2), rgb(57 255 136 / 0.05)),
-    transparent;
-  animation: effect-cursor 5.2s ease-in-out infinite;
-}
-
-.effect-copy {
-  position: absolute;
-  right: 1.25rem;
-  bottom: 1.25rem;
+  inset: 0.3rem 0.75rem;
   display: grid;
-  gap: 0.45rem;
-  font-family: var(--font-geist-mono), monospace;
-  text-align: right;
+  grid-template-columns: repeat(6, minmax(1.2rem, 1fr));
+  gap: 0.65rem 1.4rem;
+  color: rgb(57 255 136 / 0.12);
+  font-size: clamp(1rem, 3vw, 1.7rem);
+  line-height: 1;
 }
 
-.effect-copy span {
-  color: rgb(161 161 170);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
+.scramble-lab__rain span {
+  animation: scramble-fall 2.8s linear infinite;
+  animation-delay: calc(var(--rain-delay, 0) * -0.12s);
 }
 
-.effect-copy strong {
-  color: rgb(244 244 245);
-  font-size: clamp(1.5rem, 3vw, 2.75rem);
-  font-weight: 600;
+.scramble-lab__headline {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  min-height: clamp(13rem, 33vw, 19rem);
+  padding: clamp(1rem, 3vw, 1.8rem);
+  color: #5fffd0;
+  font-size: clamp(2.9rem, 9vw, 5.8rem);
+  font-weight: 800;
   line-height: 0.95;
-  max-width: 11ch;
+  text-transform: uppercase;
+  text-wrap: balance;
+  text-shadow:
+    0 0 20px rgb(72 255 160 / 0.34),
+    0 0 38px rgb(56 189 248 / 0.18);
+}
+
+.scramble-lab__headline span:first-child {
+  color: rgb(218 245 255);
+}
+
+.scramble-lab__headline span {
+  display: block;
+  min-height: 0.95em;
   overflow-wrap: anywhere;
 }
 
-@keyframes effect-scan {
+.scramble-lab__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1.1rem;
+}
+
+.scramble-lab__controls button {
+  min-height: 2.7rem;
+  border: 1px solid rgb(57 255 136 / 0.32);
+  padding: 0 1rem;
+  color: rgb(226 232 240);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.scramble-lab__controls button:hover {
+  transform: translateY(-1px);
+  border-color: rgb(94 234 212 / 0.8);
+}
+
+.scramble-lab__execute {
+  background: linear-gradient(135deg, #49d78b, #5cffb3);
+  color: #02100b;
+}
+
+.scramble-lab__mode {
+  background: rgb(4 9 10 / 0.74);
+}
+
+.scramble-lab__mode[data-active="true"] {
+  border-color: rgb(94 234 212);
+  color: #5fffd0;
+  box-shadow: inset 0 0 18px rgb(45 212 191 / 0.12);
+}
+
+.scramble-lab__panel {
+  display: grid;
+  gap: 0.85rem;
+  border-top: 1px solid rgb(57 255 136 / 0.18);
+  padding: 1.1rem;
+  color: rgb(148 163 184);
+  font-size: 0.82rem;
+}
+
+.scramble-lab__panel div {
+  display: grid;
+  grid-template-columns: minmax(5rem, 0.42fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+.scramble-lab__panel span {
+  color: rgb(91 120 111);
+}
+
+.scramble-lab__panel strong {
+  color: rgb(190 214 205);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.scramble-lab__panel meter {
+  width: 100%;
+  height: 0.55rem;
+  border: 1px solid rgb(57 255 136 / 0.25);
+  background: transparent;
+}
+
+.scramble-lab__panel meter::-webkit-meter-bar {
+  border: 0;
+  background: rgb(4 12 12);
+}
+
+.scramble-lab__panel meter::-webkit-meter-optimum-value {
+  background: linear-gradient(90deg, #67d7ff, #5cffb3, #ffd86b);
+}
+
+.scramble-lab__panel meter::-moz-meter-bar {
+  background: linear-gradient(90deg, #67d7ff, #5cffb3, #ffd86b);
+}
+
+@keyframes scramble-scan {
   from {
-    transform: translateX(-85%);
+    transform: translateX(-88%);
   }
 
   to {
-    transform: translateX(85%);
+    transform: translateX(88%);
   }
 }
 
-@keyframes effect-line-a {
-  0%,
-  100% {
-    transform: scaleX(0.42);
+@keyframes scramble-fall {
+  from {
+    transform: translateY(-1.1rem);
+    opacity: 0.18;
   }
 
-  45% {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes effect-line-b {
-  0%,
-  100% {
-    transform: translateX(18%) scaleX(0.36);
-  }
-
-  55% {
-    transform: translateX(0) scaleX(1);
+  to {
+    transform: translateY(1.1rem);
+    opacity: 0.04;
   }
 }
 
-@keyframes effect-line-c {
-  0%,
-  100% {
-    transform: translateX(0) scaleX(0.5);
+@media (max-width: 520px) {
+  .scramble-lab__headline {
+    font-size: clamp(2.35rem, 16vw, 3.4rem);
   }
 
-  50% {
-    transform: translateX(12%) scaleX(0.86);
-  }
-}
-
-@keyframes effect-cursor {
-  0%,
-  100% {
-    transform: translate(-18%, 4%) rotate(0deg);
+  .scramble-lab__controls button {
+    flex: 1 1 8.5rem;
   }
 
-  50% {
-    transform: translate(16%, -16%) rotate(12deg);
+  .scramble-lab__panel div {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
   }
 }

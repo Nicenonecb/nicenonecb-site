@@ -1,0 +1,592 @@
+.page {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 32% 44%, rgb(255 255 255 / 0.035), transparent 30rem),
+    #0a0a0c;
+  color: #ffffff;
+}
+
+.previewRoot {
+  min-height: 0;
+  height: 100%;
+  isolation: isolate;
+}
+
+.canvasMount {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  min-width: 100vw;
+  min-height: 100svh;
+  pointer-events: auto;
+}
+
+.previewRoot .canvasMount {
+  position: absolute;
+  min-width: 0;
+  min-height: 0;
+}
+
+.canvasMount canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.fallbackScene {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  background: #0a0a0c;
+  pointer-events: none;
+}
+
+.previewRoot .fallbackScene {
+  position: absolute;
+}
+
+.previewRoot .fallbackTop {
+  top: 15%;
+  left: 8%;
+  width: 84%;
+  height: 3.25rem;
+  padding: 0 1rem;
+  font-size: 0.7rem;
+}
+
+.previewRoot .fallbackDesigned {
+  top: 34%;
+  left: 8%;
+  width: 45%;
+  height: 6rem;
+  padding: 0.8rem;
+  font-size: 3rem;
+}
+
+.previewRoot .fallbackGlass {
+  top: 33%;
+  left: 48%;
+  width: 44%;
+  height: 6.4rem;
+  padding: 0.8rem;
+  font-size: 3rem;
+}
+
+.previewRoot .fallbackCopy {
+  top: 60%;
+  left: 9%;
+  width: 42%;
+  min-height: 4.5rem;
+  padding: 0.8rem;
+  font-size: 0.76rem;
+}
+
+.previewRoot .fallbackFooter {
+  top: 62%;
+  left: 49%;
+  width: 43%;
+  min-height: 4.4rem;
+  padding: 0.75rem;
+  font-size: 0.68rem;
+}
+
+.previewRoot .fallbackFooter span:first-child {
+  padding: 0.55rem 0.7rem;
+}
+
+.fallbackPane {
+  position: absolute;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.4);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.035)),
+    #0a0a0c;
+  box-shadow:
+    inset 0 0 22px rgb(255 255 255 / 0.08),
+    0 0 28px rgb(116 247 255 / 0.12);
+  color: #ffffff;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+.fallbackTop {
+  top: 18%;
+  left: 12%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(48rem, 60vw);
+  height: 4.5rem;
+  padding: 0 1.6rem;
+  border-radius: 10px;
+  color: rgb(255 255 255 / 0.68);
+  font-size: 0.82rem;
+  transform: rotate(-0.6deg);
+}
+
+.fallbackTop span:first-child {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.fallbackDesigned {
+  top: 35%;
+  left: 12%;
+  width: min(27rem, 34vw);
+  height: 11rem;
+  padding: 1.4rem;
+  border-radius: 14px;
+  font-size: clamp(3rem, 7vw, 7rem);
+  font-weight: 500;
+  line-height: 1;
+  transform: rotate(1deg);
+}
+
+.fallbackGlass {
+  top: 34%;
+  left: min(39rem, 45vw);
+  width: min(28rem, 34vw);
+  height: 12rem;
+  padding: 1.4rem;
+  border-radius: 14px;
+  font-size: clamp(3rem, 7vw, 7rem);
+  font-weight: 500;
+  line-height: 1;
+  transform: rotate(-1.2deg);
+}
+
+.fallbackCopy {
+  top: 58%;
+  left: 13%;
+  width: min(24rem, 32vw);
+  min-height: 7rem;
+  padding: 1.2rem;
+  border-radius: 12px;
+  color: rgb(255 255 255 / 0.72);
+  font-size: 1rem;
+  line-height: 1.55;
+  transform: rotate(-1deg);
+}
+
+.fallbackFooter {
+  top: 60%;
+  left: min(38rem, 44vw);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: min(29rem, 36vw);
+  min-height: 7rem;
+  padding: 1.2rem;
+  border-radius: 12px;
+  color: rgb(255 255 255 / 0.74);
+  font-size: 0.82rem;
+  transform: rotate(0.8deg);
+}
+
+.fallbackFooter span:first-child {
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0a0a0c;
+  padding: 0.8rem 1rem;
+  font-weight: 700;
+}
+
+.backLink {
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin: 1rem 0 0 1rem;
+  padding: 0 1rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(10 10 12 / 0.74);
+  color: rgb(255 255 255 / 0.62);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.backLink:hover {
+  border-color: rgb(255 255 255 / 0.36);
+  color: rgb(255 255 255 / 0.9);
+}
+
+.srTitle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.funBadge {
+  position: absolute;
+  left: 20px;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 256px;
+  padding: 20px;
+  border-radius: 20px;
+  background: #161616;
+  color: #ffffff;
+  text-decoration: none;
+  transform: scale(0.65);
+  transform-origin: bottom left;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.funBadge:hover {
+  background: #fe8040;
+  transform: scale(0.68);
+}
+
+.previewRoot .funBadge {
+  left: 0.7rem;
+  bottom: 0.7rem;
+  transform: scale(0.5);
+}
+
+.previewRoot .funBadge:hover {
+  transform: scale(0.52);
+}
+
+.funCopy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.1rem;
+  min-width: 82px;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.48;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.funCopy span:first-child {
+  font-weight: 700;
+}
+
+.funPixels {
+  position: relative;
+  display: block;
+  width: 96px;
+  height: 34px;
+  color: #fe8040;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+.funBadge:hover .funPixels {
+  color: #ffffff;
+}
+
+.funPixels strong {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow:
+    0 0 0 currentColor,
+    2px 0 0 currentColor;
+}
+
+.funPixels i {
+  position: absolute;
+  top: calc(var(--dot-y) * 8px);
+  left: calc(var(--dot-x) * 9px);
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: var(--dot-opacity);
+}
+
+.dialPanel {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 6;
+  width: 280px;
+  max-height: calc(100svh - 2rem);
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 14px;
+  background: #212121;
+  box-shadow: 0 18px 38px rgb(0 0 0 / 0.42);
+  color: rgb(255 255 255 / 0.72);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+.dialHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0.8rem 0.45rem;
+  color: #ffffff;
+}
+
+.dialHeader strong {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.dialHeader span {
+  color: rgb(255 255 255 / 0.58);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+.dialToolbar {
+  display: grid;
+  grid-template-columns: 36px 1fr 78px;
+  gap: 0.42rem;
+  padding: 0 0.75rem 0.7rem;
+}
+
+.dialToolbar button,
+.regenerateButton {
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.07);
+  color: rgb(255 255 255 / 0.72);
+  font-size: 0.82rem;
+}
+
+.dialToolbar button:first-child {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 700;
+}
+
+.regenerateButton {
+  width: calc(100% - 1.5rem);
+  margin: 0 0.75rem 0.65rem;
+}
+
+.dialSection {
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+  padding: 0.7rem 0.75rem 0.45rem;
+  color: rgb(255 255 255 / 0.72);
+  font-size: 0.86rem;
+}
+
+.dialRows {
+  display: grid;
+  gap: 0.36rem;
+  max-height: calc(100svh - 13rem);
+  overflow: hidden;
+  padding: 0 0.75rem 0.85rem;
+}
+
+.dialRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.07);
+  padding: 0 0.72rem;
+  font-size: 0.82rem;
+}
+
+.dialRow span {
+  position: relative;
+  z-index: 1;
+}
+
+.dialRow span:last-child {
+  color: rgb(255 255 255 / 0.46);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.76rem;
+}
+
+.dialRow i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: rgb(255 255 255 / 0.1);
+}
+
+.textureSource {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  width: 1440px;
+  height: 900px;
+  overflow: hidden;
+  background: #0a0a0c;
+  pointer-events: none;
+}
+
+.textureHero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 1440px;
+  height: 900px;
+  padding: 115px 126px 54px;
+  background: #0a0a0c;
+  color: #ffffff;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+.textureNav {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  height: 28px;
+  color: #b8b8be;
+  font-size: 13px;
+}
+
+.textureBrandGroup {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.textureMark {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.textureLinks {
+  display: flex;
+  gap: 28px;
+}
+
+.textureSignIn {
+  margin-left: auto;
+}
+
+.textureMain {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 720px;
+  gap: 28px;
+}
+
+.textureEyebrow {
+  color: #6e6e76;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.textureHeadline {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  color: #ffffff;
+  font-size: 132px;
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.textureSub {
+  max-width: 520px;
+  margin: 0;
+  color: #8a8a92;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.textureCtas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.texturePrimary,
+.textureSecondary {
+  display: inline-grid;
+  align-items: center;
+  min-height: 40px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.texturePrimary {
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0a0a0c;
+  padding: 0 18px;
+}
+
+.textureFooter {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgb(255 255 255 / 0.06);
+  padding-top: 20px;
+  color: #6e6e76;
+  font-size: 12px;
+}
+
+@media (max-width: 960px) {
+  .dialPanel {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .backLink {
+    margin: 0.75rem 0 0 0.75rem;
+  }
+
+  .funBadge {
+    left: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    transform: scale(0.54);
+  }
+
+  .funBadge:hover {
+    transform: scale(0.56);
+  }
+
+  .fallbackScene {
+    transform: translateX(-8vw) scale(0.9);
+    transform-origin: center;
+  }
+
+  .fallbackTop {
+    width: 34rem;
+  }
+
+  .fallbackDesigned,
+  .fallbackGlass {
+    width: 18rem;
+    height: 9rem;
+  }
+
+  .fallbackCopy,
+  .fallbackFooter {
+    width: 18rem;
+  }
+}

@@ -1,0 +1,297 @@
+.page {
+  min-height: 100svh;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.055) 1px, transparent 1px),
+    linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(135deg, #050607 0%, #09110e 48%, #0d0d11 100%);
+  background-size: 44px 44px, 44px 44px, auto;
+  color: #f4f4f5;
+}
+
+.header,
+.hero,
+.grid,
+.detailBack,
+.detailShell {
+  width: min(74rem, calc(100% - 2.5rem));
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 4.75rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.logo,
+.nav a {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+.logo {
+  font-size: 0.76rem;
+  color: #f8fafc;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2rem);
+  font-size: 0.7rem;
+  color: rgb(244 244 245 / 0.62);
+}
+
+.nav a {
+  transition: color 160ms ease;
+}
+
+.nav a:hover {
+  color: #9bf5d1;
+}
+
+.hero {
+  display: grid;
+  gap: 1.2rem;
+  padding: clamp(3.5rem, 8vw, 7rem) 0 2rem;
+}
+
+.eyebrow {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.72rem;
+  color: #9bf5d1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 9ch;
+  color: #f8fafc;
+  font-size: clamp(4rem, 11vw, 8.75rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.hero p:last-child {
+  max-width: 42rem;
+  color: rgb(244 244 245 / 0.68);
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 31rem));
+  gap: 1rem;
+  justify-content: start;
+  align-items: start;
+  padding: 1.5rem 0 max(4rem, env(safe-area-inset-bottom));
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto minmax(17.5rem, auto) auto;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(9 10 12 / 0.82);
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  color: rgb(244 244 245 / 0.54);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.cardMeta span:first-child {
+  color: #9bf5d1;
+}
+
+.previewFrame {
+  min-height: 17.5rem;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #050607;
+}
+
+/* 卡片预览需要固定高度，避免 Three.js 重绘改变卡片布局。 */
+.previewFrame :global(.scramble-lab) {
+  height: 100%;
+  min-height: 17.5rem;
+  border: 0;
+}
+
+.previewFrame :global(.scramble-lab__screen),
+.previewFrame :global(.scramble-lab__headline) {
+  min-height: clamp(10.5rem, 22vw, 14rem);
+}
+
+.previewFrame :global(.scramble-lab__headline) {
+  font-size: clamp(2.4rem, 5vw, 4.45rem);
+}
+
+.cardBody {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: 1.3rem;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.cardBody h2 {
+  color: #f8fafc;
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.cardBody p {
+  max-width: 42rem;
+  color: rgb(244 244 245 / 0.66);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.stackList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.stackList span {
+  border: 1px solid rgb(155 245 209 / 0.24);
+  padding: 0.5rem 0.62rem;
+  background: rgb(155 245 209 / 0.055);
+  color: rgb(210 246 232 / 0.78);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+
+.openLink {
+  width: fit-content;
+  min-height: 2.75rem;
+  border: 1px solid rgb(155 245 209 / 0.55);
+  padding: 0.85rem 1rem;
+  color: #9bf5d1;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.openLink:hover {
+  border-color: #9bf5d1;
+  background: #9bf5d1;
+  color: #05100c;
+}
+
+.detailBack {
+  display: block;
+  padding: 1.25rem 0 0;
+  color: rgb(155 245 209 / 0.78);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: color 160ms ease;
+}
+
+.detailBack:hover {
+  color: #9bf5d1;
+}
+
+.detailShell {
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 3.25rem) 0 max(4rem, env(safe-area-inset-bottom));
+}
+
+.detailIntro {
+  display: grid;
+  gap: 1rem;
+  max-width: 46rem;
+}
+
+.detailIntro h1 {
+  color: #f8fafc;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.detailIntro p {
+  color: rgb(244 244 245 / 0.68);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.detailStage {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(0 0 0 / 0.38);
+}
+
+.detailStage :global(.scramble-lab) {
+  min-height: 40rem;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 1rem 0;
+  }
+
+  .nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .grid {
+    padding-top: 1rem;
+  }
+
+  .card {
+    grid-template-rows: auto minmax(17rem, auto) auto;
+  }
+
+  .previewFrame,
+  .previewFrame :global(.scramble-lab) {
+    min-height: 17rem;
+  }
+}

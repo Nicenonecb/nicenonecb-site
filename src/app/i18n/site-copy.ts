@@ -32,6 +32,7 @@ export const copy = {
         "A focused space for motion, performance, and interaction feedback. Effects are not decoration here; they make key product moments clearer and more memorable.",
       preview: "effect.preview",
       live: "live",
+      openGlassHero: "Open Effects",
       items: [
         {
           name: "Scroll Choreography",
@@ -121,6 +122,7 @@ export const copy = {
         "这里展示我对动效、性能和交互反馈的处理方式：不是为了炫技堆效果，而是让产品在关键瞬间更清晰、更有质感。",
       preview: "effect.preview",
       live: "live",
+      openGlassHero: "打开特效库",
       items: [
         {
           name: "Scroll Choreography",
