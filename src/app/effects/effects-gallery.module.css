@@ -130,19 +130,13 @@
 }
 
 /* 卡片预览需要固定高度，避免 Three.js 重绘改变卡片布局。 */
-.previewFrame :global(.scramble-lab) {
+.previewFrame :global([data-effect="scramble-text-lab"]) {
+  --scramble-headline-font-size: clamp(2.4rem, 5vw, 4.45rem);
+  --scramble-screen-min-height: clamp(10.5rem, 22vw, 14rem);
+
   height: 100%;
   min-height: 17.5rem;
   border: 0;
-}
-
-.previewFrame :global(.scramble-lab__screen),
-.previewFrame :global(.scramble-lab__headline) {
-  min-height: clamp(10.5rem, 22vw, 14rem);
-}
-
-.previewFrame :global(.scramble-lab__headline) {
-  font-size: clamp(2.4rem, 5vw, 4.45rem);
 }
 
 .cardBody {
@@ -255,7 +249,7 @@
   background: rgb(0 0 0 / 0.38);
 }
 
-.detailStage :global(.scramble-lab) {
+.detailStage :global([data-effect="scramble-text-lab"]) {
   min-height: 40rem;
   border: 0;
 }
@@ -291,7 +285,7 @@
   }
 
   .previewFrame,
-  .previewFrame :global(.scramble-lab) {
+  .previewFrame :global([data-effect="scramble-text-lab"]) {
     min-height: 17rem;
   }
 }

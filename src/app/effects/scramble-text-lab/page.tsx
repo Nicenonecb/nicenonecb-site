@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "../effects-gallery.module.css";
-import { ScrambleTextLab } from "../scramble-text-lab";
+import { ScrambleTextLab } from "./scramble-text-lab";
 
 export const metadata: Metadata = {
   title: "Scramble Text Lab | NiceNoneCB",

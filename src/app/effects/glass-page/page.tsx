@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GlassPage } from "../glass-page";
+import { GlassPage } from "./glass-page";
 
 export const metadata: Metadata = {
   title: "glass-page Effect | NiceNoneCB",

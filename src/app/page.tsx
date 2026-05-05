@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GlassPage } from "./effects/glass-page";
+import { GlassPage } from "./effects/glass-page/glass-page";
 import { LanguageSwitch } from "./i18n/language-switch";
 import { copy, navItems, type Lang } from "./i18n/site-copy";
 

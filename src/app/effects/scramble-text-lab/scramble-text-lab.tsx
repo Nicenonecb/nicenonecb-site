@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import styles from "./scramble-text-lab.module.css";
 
 type CharacterMode = "blocks" | "symbols" | "numbers" | "braille";
 
@@ -129,19 +130,19 @@ export function ScrambleTextLab() {
   }, [frame, frameLimit, replay]);
 
   return (
-    <div className="scramble-lab">
-      <div className="scramble-lab__status" aria-hidden="true">
-        <span className="scramble-lab__dot" />
+    <div className={styles.lab} data-effect="scramble-text-lab">
+      <div className={styles.status} aria-hidden="true">
+        <span className={styles.dot} />
         <span>SYNC {progress.toString().padStart(3, "0")}%</span>
       </div>
 
-      <div className="scramble-lab__command">
+      <div className={styles.command}>
         <span>root@effects:~$</span>
         <strong>run ./variable-text --chars={mode} --mode=signal</strong>
       </div>
 
-      <div className="scramble-lab__screen" aria-live="polite">
-        <div className="scramble-lab__rain" aria-hidden="true">
+      <div className={styles.screen} aria-live="polite">
+        <div className={styles.rain} aria-hidden="true">
           {Array.from({ length: 18 }).map((_, index) => (
             <span key={index}>
               {
@@ -152,7 +153,7 @@ export function ScrambleTextLab() {
             </span>
           ))}
         </div>
-        <h3 className="scramble-lab__headline">
+        <h3 className={styles.headline}>
           {/* 保持每行独立渲染，避免字符揭示时改变标题块高度。 */}
           {scrambledLines.map((line, index) => (
             <span key={`${payloadIndex}-${index}`}>{line}</span>
@@ -160,13 +161,13 @@ export function ScrambleTextLab() {
         </h3>
       </div>
 
-      <div className="scramble-lab__controls" aria-label="Scramble character sets">
-        <button className="scramble-lab__execute" onClick={replay} type="button">
+      <div className={styles.controls} aria-label="Scramble character sets">
+        <button className={styles.execute} onClick={replay} type="button">
           Execute &gt;
         </button>
         {characterModes.map((characterMode) => (
           <button
-            className="scramble-lab__mode"
+            className={styles.mode}
             data-active={mode === characterMode}
             key={characterMode}
             onClick={() => selectMode(characterMode)}
@@ -177,7 +178,7 @@ export function ScrambleTextLab() {
         ))}
       </div>
 
-      <div className="scramble-lab__panel">
+      <div className={styles.panel}>
         <div>
           <span>seed</span>
           <strong>{seed}</strong>
