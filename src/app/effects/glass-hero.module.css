@@ -3,8 +3,8 @@
   min-height: 100svh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 32% 44%, rgb(255 255 255 / 0.035), transparent 30rem),
-    #0a0a0c;
+    linear-gradient(180deg, #030407 0%, #070910 52%, #030407 100%),
+    #030407;
   color: #ffffff;
 }
 
@@ -20,7 +20,14 @@
   z-index: 1;
   min-width: 100vw;
   min-height: 100svh;
+  cursor: grab;
   pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.canvasMount:active {
+  cursor: grabbing;
 }
 
 .previewRoot .canvasMount {
@@ -428,125 +435,54 @@
 
 .textureSource {
   position: fixed;
-  top: 0;
-  left: -10000px;
-  width: 1440px;
-  height: 900px;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-  background: #0a0a0c;
+  background:
+    linear-gradient(180deg, #030407 0%, #070910 52%, #030407 100%),
+    #030407;
   pointer-events: none;
+  text-align: center;
 }
 
-.textureHero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 1440px;
-  height: 900px;
-  padding: 115px 126px 54px;
-  background: #0a0a0c;
-  color: #ffffff;
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+.textureLabel {
+  margin: 0;
+  color: rgb(248 248 251 / 0.62);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: clamp(0.68rem, 0.95vw, 0.88rem);
+  font-weight: 700;
   letter-spacing: 0;
-}
-
-.textureNav {
-  display: flex;
-  align-items: center;
-  gap: 48px;
-  height: 28px;
-  color: #b8b8be;
-  font-size: 13px;
-}
-
-.textureBrandGroup {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.textureMark {
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  background: #ffffff;
-}
-
-.textureLinks {
-  display: flex;
-  gap: 28px;
-}
-
-.textureSignIn {
-  margin-left: auto;
-}
-
-.textureMain {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 720px;
-  gap: 28px;
-}
-
-.textureEyebrow {
-  color: #6e6e76;
-  font-size: 12px;
   text-transform: uppercase;
 }
 
-.textureHeadline {
-  display: grid;
-  gap: 0;
+.textureTitle {
+  width: min(1180px, 90vw);
   margin: 0;
-  color: #ffffff;
-  font-size: 132px;
-  font-weight: 500;
-  line-height: 0.92;
-  letter-spacing: 0;
+  color: rgb(248 249 253 / 0.96);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(4.2rem, 8.8vw, 10rem);
+  font-weight: 900;
+  line-height: 0.9;
+  text-shadow: 0 0 34px rgb(255 255 255 / 0.2);
 }
 
-.textureSub {
-  max-width: 520px;
-  margin: 0;
-  color: #8a8a92;
-  font-size: 18px;
-  line-height: 1.55;
+.previewRoot .textureSource {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-.textureCtas {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.previewRoot .textureLabel {
+  font-size: 0.56rem;
 }
 
-.texturePrimary,
-.textureSecondary {
-  display: inline-grid;
-  align-items: center;
-  min-height: 40px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.texturePrimary {
-  border-radius: 8px;
-  background: #ffffff;
-  color: #0a0a0c;
-  padding: 0 18px;
-}
-
-.textureFooter {
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid rgb(255 255 255 / 0.06);
-  padding-top: 20px;
-  color: #6e6e76;
-  font-size: 12px;
+.previewRoot .textureTitle {
+  width: 92%;
+  font-size: clamp(2.2rem, 7vw, 4.2rem);
 }
 
 @media (max-width: 960px) {
@@ -588,5 +524,11 @@
   .fallbackCopy,
   .fallbackFooter {
     width: 18rem;
+  }
+
+  .textureTitle {
+    width: 96vw;
+    font-size: clamp(2.25rem, 8.7vw, 3.1rem);
+    white-space: nowrap;
   }
 }

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { GlassHero } from "../glass-hero";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "glass Effect | NiceNoneCB",
-  description:
-    "A Three.js fragmented glass experiment for NiceNoneCB effects.",
+  title: "glass-page Effect | NiceNoneCB",
+  description: "Redirects to the updated glass-page effect.",
 };
 
 export default function GlassHeroEffectPage() {
-  return <GlassHero />;
+  redirect("/effects/glass-page");
 }

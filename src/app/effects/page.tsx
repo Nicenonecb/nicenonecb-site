@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GlassHero } from "./glass-hero";
+import { GlassPage } from "./glass-page";
 import { ScrambleTextLab } from "./scramble-text-lab";
 import styles from "./effects-gallery.module.css";
 
 const effects = [
   {
-    href: "/effects/glass-hero",
+    href: "/effects/glass-page",
     index: "01",
-    name: "glass",
+    name: "glass-page",
     summary:
-      "黑底 hero 被同步成 Canvas 纹理，再贴到分片玻璃上，模拟 Prism 实验里的材质、色散边缘和参数面板呈现。",
-    stack: ["Next.js App Router", "React Client Component", "Three.js", "CanvasTexture"],
-    preview: <GlassHero variant="preview" />,
+      "参考 liquid-glass-paralax 的黑场碎片舞台：巨型文字在玻璃层后方漂移，碎片随指针折射、外扩并拉出冷暖色散边。",
+    stack: ["Next.js App Router", "React Client Component", "Three.js", "MeshPhysicalMaterial"],
+    preview: <GlassPage variant="preview" />,
   },
   {
     href: "/effects/scramble-text-lab",

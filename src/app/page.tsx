@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GlassHero } from "./effects/glass-hero";
+import { GlassPage } from "./effects/glass-page";
 import { LanguageSwitch } from "./i18n/language-switch";
 import { copy, navItems, type Lang } from "./i18n/site-copy";
 
@@ -157,7 +157,7 @@ export default function Home() {
               className="mt-6 inline-flex border border-emerald-300/70 px-4 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200 transition hover:bg-emerald-300 hover:text-black"
               href="/effects"
             >
-              {t.effects.openGlassHero}
+              {t.effects.openEffectsLab}
             </Link>
           </div>
 
@@ -167,7 +167,7 @@ export default function Home() {
               <span className="text-emerald-300">{t.effects.live}</span>
             </div>
             <div className="min-h-[22rem] overflow-hidden">
-              <GlassHero variant="preview" />
+              <GlassPage variant="preview" />
             </div>
           </div>
         </section>
