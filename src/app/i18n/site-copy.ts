@@ -46,6 +46,14 @@ export const copy = {
           name: "Micro Interaction",
           description: "Stateful motion for buttons, cards, lists, and flows.",
         },
+        {
+          name: "Infinite Product Canvas",
+          description: "Draggable, zoomable product space with click-to-preview selection.",
+        },
+        {
+          name: "Liquid Layers",
+          description: "PVFS liquid layers with dense colored material boundaries.",
+        },
       ],
     },
     work: {
@@ -135,6 +143,14 @@ export const copy = {
         {
           name: "Micro Interaction",
           description: "按钮、卡片、列表状态的细节动效。",
+        },
+        {
+          name: "Infinite Product Canvas",
+          description: "可拖拽、可缩放的商品空间，点击节点展示当前商品。",
+        },
+        {
+          name: "Liquid Layers",
+          description: "PVFS 四色液体层，拖拽形成厚边界、空腔和回流。",
         },
       ],
     },

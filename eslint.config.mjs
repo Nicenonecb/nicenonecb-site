@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "public/effects/liquid-layers-draw/pvfs2d_v2_7.js",
     "next-env.d.ts",
   ]),
 ]);

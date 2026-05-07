@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPage } from "./glass-page/glass-page";
+import { InfiniteProductCanvas } from "./infinite-product-canvas/infinite-product-canvas";
+import { LiquidLayersDraw } from "./liquid-layers-draw/liquid-layers-draw";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import styles from "./effects-gallery.module.css";
@@ -33,6 +35,24 @@ const effects = [
     stack: ["CSS :has()", "Anchor Positioning", "ResizeObserver fallback", "Focus states"],
     preview: <MagneticNav variant="preview" />,
   },
+  {
+    href: "/effects/infinite-product-canvas",
+    index: "04",
+    name: "Infinite Product Canvas",
+    summary:
+      "参考 shop.ize.capital 首页：商品节点铺在世界坐标中，拖拽移动相机，滚轮或双指缩放，点击节点在当前画布下方显示商品详情。",
+    stack: ["Pointer Events", "CSS transform camera", "Wheel / pinch zoom", "Click selection"],
+    preview: <InfiniteProductCanvas variant="preview" />,
+  },
+  {
+    href: "/effects/liquid-layers-draw",
+    index: "05",
+    name: "Liquid Layers",
+    summary:
+      "一比一参考 grantkot.com/ll 默认效果：黑场底部四色液体层，按住拖拽时形成厚边界、空腔、液柱和回流。",
+    stack: ["PVFS WASM", "WebGL points", "Pointer velocity", "Position fluid"],
+    preview: <LiquidLayersDraw variant="preview" />,
+  },
 ];
 
 export const metadata: Metadata = {
@@ -58,7 +78,7 @@ export default function EffectsPage() {
         <p className={styles.eyebrow}>Frontend Effects</p>
         <h1 id="effects-title">Effects Lab</h1>
         <p>
-          当前已整理三个独立效果。每张卡片都包含实时预览、效果描述和技术栈信息，点击进入后可以查看完整版本。
+          当前已整理五个独立效果。每张卡片都包含实时预览、效果描述和技术栈信息，点击进入后可以查看完整版本。
         </p>
       </section>
 
