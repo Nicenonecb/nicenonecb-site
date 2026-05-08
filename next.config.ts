@@ -2,8 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   devIndicators: false,
-  // Cloudflare Pages 直接托管静态产物，构建后输出到 out/。
-  output: "export",
   images: {
     remotePatterns: [
       {
@@ -15,3 +13,6 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// Cloudflare Workers 本地开发需要初始化 OpenNext 适配层。
+import("@opennextjs/cloudflare").then((m) => m.initOpenNextCloudflareForDev());
