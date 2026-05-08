@@ -54,8 +54,31 @@ export const copy = {
     work: {
       eyebrow: "Selected Work",
       title: "End-to-end project experience",
-      count: "003 entries",
+      count: "005 entries",
+      pendingDialog: {
+        eyebrow: "Project status",
+        title: "In development...",
+        description:
+          "This project is still being polished. More details will be available once it is ready to share.",
+        close: "Close",
+      },
       items: [
+        {
+          name: "LiteKV",
+          type: "AI Infrastructure",
+          description:
+            "A DeepSeek-V4 article demo for running, measuring, and explaining long-context attention trade-offs on a local machine.",
+          stack: "Python, uv, pytest, KV Cache, sparse attention",
+          href: "https://github.com/Nicenonecb/deepseek-v4-csa-lite-m1",
+        },
+        {
+          name: "RepoMap",
+          type: "AI Agent Tooling",
+          description:
+            "A CLI that generates stable, reproducible structural maps so humans and AI agents can understand large repositories before editing.",
+          stack: "TypeScript, Node.js, CLI, repository analysis",
+          href: "https://github.com/Nicenonecb/RepoMap",
+        },
         {
           name: "AI Knowledge Base",
           type: "AI Infrastructure",
@@ -120,9 +143,9 @@ export const copy = {
     },
     effects: {
       eyebrow: "前端特效",
-      title: "能落地，也能把界面做出记忆点",
+      title: "把界面做出记忆点",
       description:
-        "这里展示我对动效、性能和交互反馈的处理方式：不是为了炫技堆效果，而是让产品在关键瞬间更清晰、更有质感。",
+        "这里展示我对动效、性能和交互反馈的处理方式：让产品在关键瞬间更有质感。",
       preview: "effect.preview",
       live: "live",
       openEffectsLab: "打开特效库",
@@ -147,8 +170,30 @@ export const copy = {
     work: {
       eyebrow: "项目经历",
       title: "完整项目经验",
-      count: "003 entries",
+      count: "005 entries",
+      pendingDialog: {
+        eyebrow: "项目状态",
+        title: "正在研发中...",
+        description: "这个项目还在打磨中，准备好后会开放更多细节。",
+        close: "关闭",
+      },
       items: [
+        {
+          name: "LiteKV",
+          type: "AI 应用基建",
+          description:
+            "面向 DeepSeek-V4 技术文章的小型实验项目，用本地可运行方式测量和解释长上下文注意力的成本权衡。",
+          stack: "Python、uv、pytest、KV Cache、稀疏注意力",
+          href: "https://github.com/Nicenonecb/deepseek-v4-csa-lite-m1",
+        },
+        {
+          name: "RepoMap",
+          type: "AI Agent 工具",
+          description:
+            "生成稳定、可复现的仓库结构地图，帮助开发者和 AI Agent 在修改大型代码库前快速理解模块与入口。",
+          stack: "TypeScript、Node.js、CLI、仓库分析",
+          href: "https://github.com/Nicenonecb/RepoMap",
+        },
         {
           name: "AI Knowledge Base",
           type: "AI 应用基建",

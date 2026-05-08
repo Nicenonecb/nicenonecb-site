@@ -40,6 +40,7 @@ function EffectPreview({ href }: { href: string }) {
 export default function Home() {
   const [lang, setLang] = useState<Lang>("zh");
   const [selectedEffectHref, setSelectedEffectHref] = useState(defaultEffectHref);
+  const [pendingProjectName, setPendingProjectName] = useState<string | null>(null);
   const featuredNavItem = navItems.find((item) => "featured" in item);
   const featuredNavText = featuredNavItem?.[lang] ?? "";
   const [featuredNavLabel, setFeaturedNavLabel] = useState(featuredNavText);
@@ -50,6 +51,24 @@ export default function Home() {
   useEffect(() => {
     document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
   }, [lang]);
+
+  useEffect(() => {
+    if (!pendingProjectName) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setPendingProjectName(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [pendingProjectName]);
 
   useEffect(() => {
     if (!featuredNavText) {
@@ -239,27 +258,55 @@ export default function Home() {
               {t.work.count}
             </span>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {t.work.items.map((project) => (
-              <article
-                className="border border-white/10 bg-zinc-950/60 p-5 transition hover:border-emerald-300/70"
-                key={project.name}
-              >
-                <div className="mb-8 flex items-center justify-between gap-4 font-mono text-xs">
-                  <span className="text-emerald-300">{project.type}</span>
-                  <span className="text-zinc-600">/</span>
-                </div>
-                <h3 className="text-xl font-semibold text-zinc-50">
-                  {project.name}
-                </h3>
-                <p className="mt-4 min-h-16 text-sm leading-7 text-zinc-400">
-                  {project.description}
-                </p>
-                <p className="mt-8 border-t border-white/10 pt-4 font-mono text-xs text-zinc-500">
-                  {project.stack}
-                </p>
-              </article>
-            ))}
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {t.work.items.map((project) => {
+              const card = (
+                <>
+                  <span className="mb-8 flex items-center justify-between gap-4 font-mono text-xs">
+                    <span className="text-emerald-300 transition group-hover:text-emerald-200">
+                      {project.type}
+                    </span>
+                    <span className="text-zinc-600">
+                      {"href" in project ? "GitHub" : "/"}
+                    </span>
+                  </span>
+                  <span className="text-xl font-semibold text-zinc-50 transition group-hover:text-emerald-100">
+                    {project.name}
+                  </span>
+                  <span className="mt-4 min-h-24 text-sm leading-7 text-zinc-400">
+                    {project.description}
+                  </span>
+                  <span className="mt-auto border-t border-white/10 pt-4 font-mono text-xs text-zinc-500">
+                    {project.stack}
+                  </span>
+                </>
+              );
+
+              if ("href" in project) {
+                return (
+                  <a
+                    className="group flex min-h-72 flex-col border border-white/10 bg-zinc-950/60 p-5 transition hover:-translate-y-0.5 hover:border-emerald-300/70 focus-visible:border-emerald-300 focus-visible:outline-none"
+                    href={project.href}
+                    key={project.name}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {card}
+                  </a>
+                );
+              }
+
+              return (
+                <button
+                  className="group flex min-h-72 flex-col border border-white/10 bg-zinc-950/60 p-5 text-left transition hover:-translate-y-0.5 hover:border-emerald-300/70 focus-visible:border-emerald-300 focus-visible:outline-none"
+                  key={project.name}
+                  onClick={() => setPendingProjectName(project.name)}
+                  type="button"
+                >
+                  {card}
+                </button>
+              );
+            })}
           </div>
         </section>
 
@@ -325,6 +372,43 @@ export default function Home() {
           </div>
         </section>
       </div>
+      {pendingProjectName ? (
+        <div
+          aria-labelledby="pending-project-title"
+          aria-modal="true"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/70 px-5 backdrop-blur-sm"
+          onClick={() => setPendingProjectName(null)}
+          role="dialog"
+        >
+          <div
+            className="w-full max-w-sm border border-emerald-300/40 bg-zinc-950 p-6 shadow-2xl shadow-emerald-950/40"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-emerald-300">
+              {t.work.pendingDialog.eyebrow}
+            </p>
+            <h2
+              className="mt-3 text-2xl font-semibold text-zinc-50"
+              id="pending-project-title"
+            >
+              {t.work.pendingDialog.title}
+            </h2>
+            <p className="mt-4 font-mono text-xs text-zinc-500">
+              {pendingProjectName}
+            </p>
+            <p className="mt-5 text-sm leading-7 text-zinc-400">
+              {t.work.pendingDialog.description}
+            </p>
+            <button
+              className="mt-7 border border-emerald-300/70 px-4 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200 transition hover:bg-emerald-300 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-300"
+              onClick={() => setPendingProjectName(null)}
+              type="button"
+            >
+              {t.work.pendingDialog.close}
+            </button>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
