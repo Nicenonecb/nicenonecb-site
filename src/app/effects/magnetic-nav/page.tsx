@@ -4,7 +4,7 @@ import styles from "../effects-gallery.module.css";
 import { MagneticNav } from "./magnetic-nav";
 
 export const metadata: Metadata = {
-  title: "Magnetic Nav Effect | NiceNoneCB",
+  title: "Magnetic Nav Effect | Nicenonecb",
   description:
     "A CSS anchor positioning inspired magnetic navigation hover effect with a measured fallback.",
 };

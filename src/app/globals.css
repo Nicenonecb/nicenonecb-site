@@ -35,3 +35,145 @@ body {
 .effect-stage {
   min-height: 25rem;
 }
+
+.nav-effect-link {
+  position: relative;
+  display: inline-block;
+  min-width: 2.8em;
+  color: #39ff88;
+  font-weight: 700;
+  text-align: center;
+  text-shadow:
+    0 0 10px rgb(57 255 136 / 0.75),
+    0 0 24px rgb(56 189 248 / 0.36),
+    0 0 42px rgb(57 255 136 / 0.18);
+  animation:
+    nav-effect-flicker 1.8s steps(1, end) infinite,
+    nav-effect-pulse 2.4s ease-in-out infinite;
+}
+
+.nav-effect-link::before,
+.nav-effect-link::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: #5fffd0;
+  content: attr(data-label);
+  opacity: 0.22;
+}
+
+.nav-effect-link::before {
+  transform: translate(-0.11em, -0.03em);
+  text-shadow: 0 0 10px rgb(14 165 233 / 0.55);
+  animation: nav-effect-glitch-a 1.8s steps(1, end) infinite;
+}
+
+.nav-effect-link::after {
+  transform: translate(0.11em, 0.03em);
+  color: #ffd86b;
+  text-shadow: 0 0 10px rgb(255 216 107 / 0.45);
+  animation: nav-effect-glitch-b 1.8s steps(1, end) infinite;
+}
+
+.nav-effect-link:hover,
+.nav-effect-link:focus-visible {
+  color: #39ff88;
+  text-shadow:
+    0 0 12px rgb(57 255 136),
+    0 0 32px rgb(56 189 248 / 0.6),
+    0 0 56px rgb(57 255 136 / 0.32);
+  animation-duration: 1.2s;
+}
+
+.nav-effect-link:hover::before,
+.nav-effect-link:hover::after,
+.nav-effect-link:focus-visible::before,
+.nav-effect-link:focus-visible::after {
+  animation-duration: 1.2s;
+}
+
+@keyframes nav-effect-flicker {
+  0%,
+  72%,
+  100% {
+    opacity: 1;
+  }
+
+  74% {
+    opacity: 0.36;
+  }
+
+  75%,
+  79% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.62;
+  }
+
+  82% {
+    opacity: 1;
+  }
+
+  91% {
+    text-shadow:
+      0 0 16px rgb(57 255 136 / 0.72),
+      0 0 34px rgb(56 189 248 / 0.24);
+  }
+}
+
+@keyframes nav-effect-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.55);
+  }
+}
+
+@keyframes nav-effect-glitch-a {
+  0%,
+  67%,
+  100% {
+    opacity: 0;
+  }
+
+  68%,
+  70% {
+    opacity: 0.72;
+  }
+
+  76%,
+  77% {
+    opacity: 0.42;
+  }
+}
+
+@keyframes nav-effect-glitch-b {
+  0%,
+  69%,
+  100% {
+    opacity: 0;
+  }
+
+  70%,
+  71% {
+    opacity: 0.55;
+  }
+
+  80%,
+  81% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-effect-link,
+  .nav-effect-link::before,
+  .nav-effect-link::after {
+    animation: none;
+  }
+}

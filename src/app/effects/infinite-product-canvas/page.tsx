@@ -4,7 +4,7 @@ import styles from "../effects-gallery.module.css";
 import { InfiniteProductCanvas } from "./infinite-product-canvas";
 
 export const metadata: Metadata = {
-  title: "Infinite Product Canvas | NiceNoneCB",
+  title: "Infinite Product Canvas | Nicenonecb",
   description:
     "A draggable and zoomable product canvas inspired by shop.ize.capital, with click-to-preview product selection.",
 };

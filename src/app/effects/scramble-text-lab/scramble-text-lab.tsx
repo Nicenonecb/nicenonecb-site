@@ -70,7 +70,11 @@ function scrambleLine(
     .join("");
 }
 
-export function ScrambleTextLab() {
+type ScrambleTextLabProps = {
+  variant?: "full" | "preview";
+};
+
+export function ScrambleTextLab({ variant = "full" }: ScrambleTextLabProps) {
   const [mode, setMode] = useState<CharacterMode>("blocks");
   const [payloadIndex, setPayloadIndex] = useState(0);
   const [frame, setFrame] = useState(0);
@@ -130,7 +134,7 @@ export function ScrambleTextLab() {
   }, [frame, frameLimit, replay]);
 
   return (
-    <div className={styles.lab} data-effect="scramble-text-lab">
+    <div className={styles.lab} data-effect="scramble-text-lab" data-variant={variant}>
       <div className={styles.status} aria-hidden="true">
         <span className={styles.dot} />
         <span>SYNC {progress.toString().padStart(3, "0")}%</span>

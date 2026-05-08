@@ -12,6 +12,12 @@
   font-family: var(--font-geist-mono), monospace;
 }
 
+.lab[data-variant="preview"] {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+}
+
 .lab::before {
   position: absolute;
   inset: 0;
@@ -52,6 +58,10 @@
   letter-spacing: 0;
 }
 
+.lab[data-variant="preview"] .status {
+  padding: 0.95rem 1rem 0.75rem;
+}
+
 .dot {
   width: 0.75rem;
   height: 0.75rem;
@@ -66,6 +76,12 @@
   padding: 2.3rem 1.1rem 0.75rem;
   color: rgb(91 120 111);
   font-size: clamp(0.72rem, 2vw, 0.95rem);
+}
+
+.lab[data-variant="preview"] .command,
+.lab[data-variant="preview"] .controls,
+.lab[data-variant="preview"] .panel {
+  display: none;
 }
 
 .command strong {
@@ -85,6 +101,11 @@
   box-shadow:
     inset 0 0 0 1px rgb(14 165 233 / 0.28),
     0 0 34px rgb(14 165 233 / 0.12);
+}
+
+.lab[data-variant="preview"] .screen {
+  min-height: 0;
+  border-bottom: 0;
 }
 
 .screen::after {
@@ -133,6 +154,13 @@
   text-shadow:
     0 0 20px rgb(72 255 160 / 0.34),
     0 0 38px rgb(56 189 248 / 0.18);
+}
+
+.lab[data-variant="preview"] .headline {
+  min-height: 100%;
+  place-content: center;
+  padding: 1.1rem;
+  text-align: center;
 }
 
 .headline span:first-child {

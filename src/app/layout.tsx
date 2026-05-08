@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NiceNoneCB | Fullstack Developer",
+  title: "Nicenonecb | Fullstack Developer",
   description:
     "Personal portfolio for fullstack work, frontend effects, AI applications, writing, and private productivity systems.",
 };

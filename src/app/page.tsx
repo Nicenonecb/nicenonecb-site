@@ -3,16 +3,87 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GlassPage } from "./effects/glass-page/glass-page";
+import { LiquidLayersDraw } from "./effects/liquid-layers-draw/liquid-layers-draw";
+import { TearableUi } from "./effects/tearable-ui/tearable-ui";
 import { LanguageSwitch } from "./i18n/language-switch";
 import { copy, navItems, type Lang } from "./i18n/site-copy";
 
+const navScrambleChars = "特效FX01#%*/<>[]{}";
+const defaultEffectHref = "/effects/glass-page";
+
+function getScrambledLabel(target: string, frame: number) {
+  return Array.from(target)
+    .map((letter, index) => {
+      if (frame > index + 3) {
+        return letter;
+      }
+
+      const charIndex = (frame * 5 + index * 7) % navScrambleChars.length;
+
+      return navScrambleChars[charIndex];
+    })
+    .join("");
+}
+
+function EffectPreview({ href }: { href: string }) {
+  switch (href) {
+    case "/effects/liquid-layers-draw":
+      return <LiquidLayersDraw variant="preview" />;
+    case "/effects/tearable-ui":
+      return <TearableUi variant="preview" />;
+    case "/effects/glass-page":
+    default:
+      return <GlassPage variant="preview" />;
+  }
+}
+
 export default function Home() {
   const [lang, setLang] = useState<Lang>("zh");
+  const [selectedEffectHref, setSelectedEffectHref] = useState(defaultEffectHref);
+  const featuredNavItem = navItems.find((item) => "featured" in item);
+  const featuredNavText = featuredNavItem?.[lang] ?? "";
+  const [featuredNavLabel, setFeaturedNavLabel] = useState(featuredNavText);
   const t = copy[lang];
+  const selectedEffect =
+    t.effects.items.find((effect) => effect.href === selectedEffectHref) ?? t.effects.items[0];
 
   useEffect(() => {
     document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
   }, [lang]);
+
+  useEffect(() => {
+    if (!featuredNavText) {
+      return;
+    }
+
+    let frame = 0;
+    let frameTimer: number | undefined;
+
+    // 顶部入口用短促字符扰动吸引点击，结束后恢复真实文案，避免影响可读性。
+    const playScramble = () => {
+      window.clearInterval(frameTimer);
+      frame = 0;
+      frameTimer = window.setInterval(() => {
+        frame += 1;
+
+        if (frame > featuredNavText.length + 5) {
+          window.clearInterval(frameTimer);
+          setFeaturedNavLabel(featuredNavText);
+          return;
+        }
+
+        setFeaturedNavLabel(getScrambledLabel(featuredNavText, frame));
+      }, 72);
+    };
+
+    playScramble();
+    const loopTimer: number = window.setInterval(playScramble, 2400);
+
+    return () => {
+      window.clearInterval(frameTimer);
+      window.clearInterval(loopTimer);
+    };
+  }, [featuredNavText]);
 
   return (
     <main className="site-grid min-h-screen overflow-hidden text-zinc-100">
@@ -22,17 +93,20 @@ export default function Home() {
             href="#top"
             className="font-mono text-sm uppercase tracking-[0.28em] text-zinc-200"
           >
-            NiceNoneCB
+            Nicenonecb
           </a>
           <div className="flex items-center gap-5">
             <nav className="hidden items-center gap-7 font-mono text-xs uppercase tracking-[0.22em] text-zinc-500 md:flex">
               {navItems.map((item) => (
                 <a
-                  className="transition hover:text-emerald-300"
-                  href={`#${item.id}`}
-                  key={item.id}
+                  className={`transition hover:text-emerald-300 ${
+                    "featured" in item ? "nav-effect-link" : ""
+                  }`}
+                  data-label={"featured" in item ? featuredNavLabel : undefined}
+                  href={"href" in item ? item.href : `#${item.id}`}
+                  key={`${item.id}-${lang}`}
                 >
-                  {item[lang]}
+                  {"featured" in item ? featuredNavLabel : item[lang]}
                 </a>
               ))}
             </nav>
@@ -45,9 +119,11 @@ export default function Home() {
           className="grid flex-1 items-center gap-12 py-16 md:grid-cols-[1.08fr_0.92fr] md:py-20"
         >
           <div>
-            <p className="mb-6 font-mono text-xs uppercase tracking-[0.32em] text-emerald-300">
-              {t.eyebrow}
-            </p>
+            {t.eyebrow ? (
+              <p className="mb-6 font-mono text-xs uppercase tracking-[0.32em] text-emerald-300">
+                {t.eyebrow}
+              </p>
+            ) : null}
             <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] text-zinc-50 sm:text-6xl lg:text-7xl">
               {t.headline}
             </h1>
@@ -86,6 +162,69 @@ export default function Home() {
           </aside>
         </section>
 
+        <section
+          id="effects"
+          className="grid gap-8 border-t border-white/10 py-14 md:grid-cols-[1fr_1fr]"
+        >
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.28em] text-zinc-500">
+              {t.effects.eyebrow}
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-zinc-100">
+              {t.effects.title}
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-400">
+              {t.effects.description}
+            </p>
+            <div className="mt-7 grid gap-3">
+              {t.effects.items.map((effect) => {
+                const isSelected = effect.href === selectedEffect.href;
+
+                return (
+                  <button
+                    aria-pressed={isSelected}
+                    className={`group border p-4 text-left transition focus-visible:border-emerald-300 focus-visible:outline-none ${
+                      isSelected
+                        ? "border-emerald-300/80 bg-emerald-300/10"
+                        : "border-white/10 bg-zinc-950/60 hover:border-emerald-300/70"
+                    }`}
+                    key={effect.name}
+                    onClick={() => setSelectedEffectHref(effect.href)}
+                    type="button"
+                  >
+                    <h3 className="font-mono text-sm text-emerald-300 transition group-hover:text-emerald-200">
+                      {effect.name}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-zinc-400">
+                      {effect.description}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+            <Link
+              className="mt-6 inline-flex border border-emerald-300/70 px-4 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200 transition hover:bg-emerald-300 hover:text-black"
+              href="/effects"
+            >
+              {t.effects.openEffectsLab}
+            </Link>
+          </div>
+
+          <div className="effect-stage border border-white/10 bg-black/45 p-5">
+            <div className="flex items-center justify-between font-mono text-xs text-zinc-500">
+              <span>{t.effects.preview}</span>
+              <span className="text-emerald-300">{t.effects.live}</span>
+            </div>
+            <div
+              className="h-[22rem] overflow-hidden"
+              data-active-effect={selectedEffect.href}
+              key={selectedEffect.href}
+            >
+              <EffectPreview href={selectedEffect.href} />
+            </div>
+          </div>
+        </section>
+
         <section id="work" className="border-t border-white/10 py-14">
           <div className="mb-7 flex items-end justify-between gap-6">
             <div>
@@ -121,54 +260,6 @@ export default function Home() {
                 </p>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section
-          id="effects"
-          className="grid gap-8 border-t border-white/10 py-14 md:grid-cols-[1fr_1fr]"
-        >
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.28em] text-zinc-500">
-              {t.effects.eyebrow}
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold text-zinc-100">
-              {t.effects.title}
-            </h2>
-            <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-400">
-              {t.effects.description}
-            </p>
-            <div className="mt-7 grid gap-3">
-              {t.effects.items.map((effect) => (
-                <article
-                  className="border border-white/10 bg-zinc-950/60 p-4 transition hover:border-emerald-300/70"
-                  key={effect.name}
-                >
-                  <h3 className="font-mono text-sm text-emerald-300">
-                    {effect.name}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-zinc-400">
-                    {effect.description}
-                  </p>
-                </article>
-              ))}
-            </div>
-            <Link
-              className="mt-6 inline-flex border border-emerald-300/70 px-4 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200 transition hover:bg-emerald-300 hover:text-black"
-              href="/effects"
-            >
-              {t.effects.openEffectsLab}
-            </Link>
-          </div>
-
-          <div className="effect-stage border border-white/10 bg-black/45 p-5">
-            <div className="mb-4 flex items-center justify-between font-mono text-xs text-zinc-500">
-              <span>{t.effects.preview}</span>
-              <span className="text-emerald-300">{t.effects.live}</span>
-            </div>
-            <div className="min-h-[22rem] overflow-hidden">
-              <GlassPage variant="preview" />
-            </div>
           </div>
         </section>
 

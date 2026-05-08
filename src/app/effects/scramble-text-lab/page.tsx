@@ -4,9 +4,9 @@ import styles from "../effects-gallery.module.css";
 import { ScrambleTextLab } from "./scramble-text-lab";
 
 export const metadata: Metadata = {
-  title: "Scramble Text Lab | NiceNoneCB",
+  title: "Scramble Text Lab | Nicenonecb",
   description:
-    "A frame-driven variable text and character scrambling experiment for NiceNoneCB effects.",
+    "A frame-driven variable text and character scrambling experiment for Nicenonecb effects.",
 };
 
 export default function ScrambleTextLabPage() {

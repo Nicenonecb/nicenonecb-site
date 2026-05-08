@@ -1,4 +1,4 @@
-# NiceNoneCB Personal Site Brief
+# Nicenonecb Personal Site Brief
 
 ## 项目目标
 

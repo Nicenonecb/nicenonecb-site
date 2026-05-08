@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, RefObject } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import {
@@ -70,6 +70,7 @@ const mobileClothConfig = {
 };
 
 export function TearableUi({ variant = "page" }: TearableUiProps) {
+  const rootRef = useRef<HTMLElement | null>(null);
   const [uiState, setUiState] = useState<CanvasUiState>(() => cloneDefaultUiState());
   const [assetVersion, setAssetVersion] = useState(0);
   const [windowSize, setWindowSize] = useState({ height: 1, width: 1 });
@@ -101,10 +102,27 @@ export function TearableUi({ variant = "page" }: TearableUiProps) {
   }, []);
 
   useEffect(() => {
-    const updateWindowSize = () => setWindowSize({ height: window.innerHeight, width: window.innerWidth });
+    const updateWindowSize = () => {
+      const bounds = rootRef.current?.getBoundingClientRect();
+
+      setWindowSize({
+        height: bounds?.height || window.innerHeight,
+        width: bounds?.width || window.innerWidth,
+      });
+    };
+
     updateWindowSize();
     window.addEventListener("resize", updateWindowSize);
-    return () => window.removeEventListener("resize", updateWindowSize);
+
+    const resizeObserver = new ResizeObserver(updateWindowSize);
+    if (rootRef.current) {
+      resizeObserver.observe(rootRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateWindowSize);
+      resizeObserver.disconnect();
+    };
   }, []);
 
   const handleDrop = useCallback((index: number) => {
@@ -189,18 +207,6 @@ export function TearableUi({ variant = "page" }: TearableUiProps) {
     });
   }, []);
 
-  if (variant === "preview") {
-    return (
-      <div className={styles.preview} data-effect="tearable-ui">
-        <div className={styles.previewSheet}>
-          <span>06</span>
-          <strong>TEARABLE UI</strong>
-          <small>canvas texture / cloth mesh</small>
-        </div>
-      </div>
-    );
-  }
-
   const aspect = windowSize.width / windowSize.height;
   const cameraBounds =
     aspect > 1
@@ -209,8 +215,12 @@ export function TearableUi({ variant = "page" }: TearableUiProps) {
 
   return (
     <main
-      className={`${styles.root} ${isDragging ? styles.dragging : ""}`}
+      className={`${styles.root} ${variant === "preview" ? styles.previewRoot : ""} ${
+        isDragging ? styles.dragging : ""
+      }`}
+      data-effect="tearable-ui"
       onContextMenu={(event) => event.preventDefault()}
+      ref={rootRef}
     >
       <Canvas
         className={styles.canvas}
@@ -246,6 +256,7 @@ export function TearableUi({ variant = "page" }: TearableUiProps) {
           activeLayerIndex={activeLayerIndex}
           layerStates={layerStates}
           assetVersion={assetVersion}
+          interactionRootRef={rootRef}
           onDrop={handleDrop}
           onDragStateChange={setIsDragging}
           onUiHover={handleUiHover}
@@ -268,6 +279,7 @@ export function TearableUi({ variant = "page" }: TearableUiProps) {
 function TearableScene({
   activeLayerIndex,
   assetVersion,
+  interactionRootRef,
   layerStates,
   onDragStateChange,
   onDrop,
@@ -277,6 +289,7 @@ function TearableScene({
 }: {
   activeLayerIndex: number;
   assetVersion: number;
+  interactionRootRef: RefObject<HTMLElement | null>;
   layerStates: LayerState[];
   onDragStateChange: (isDragging: boolean) => void;
   onDrop: (index: number) => void;
@@ -306,6 +319,7 @@ function TearableScene({
             key={layer.kind}
             layerIndex={layerIndex}
             layerKind={layer.kind}
+            interactionRootRef={interactionRootRef}
             onDragStateChange={onDragStateChange}
             onDrop={onDrop}
             onUiHover={onUiHover}
@@ -324,6 +338,7 @@ function TearableScene({
 function ClothLayer({
   activeLayerIndex,
   assetVersion,
+  interactionRootRef,
   isMobile,
   layerIndex,
   layerKind,
@@ -338,6 +353,7 @@ function ClothLayer({
 }: {
   activeLayerIndex: number;
   assetVersion: number;
+  interactionRootRef: RefObject<HTMLElement | null>;
   isMobile: boolean;
   layerIndex: number;
   layerKind: TearableLayerKind;
@@ -617,14 +633,31 @@ function ClothLayer({
       return;
     }
 
+    const getInteractionBounds = () => {
+      return (
+        interactionRootRef.current?.getBoundingClientRect() ?? {
+          height: window.innerHeight,
+          left: 0,
+          top: 0,
+          width: window.innerWidth,
+        }
+      );
+    };
+
     const clientToPoint = (clientX: number, clientY: number) => {
-      const x = (clientX / window.innerWidth - 0.5) * viewportWidth;
-      const y = (0.5 - clientY / window.innerHeight) * viewportHeight;
+      const bounds = getInteractionBounds();
+      const x = ((clientX - bounds.left) / Math.max(bounds.width, 1) - 0.5) * viewportWidth;
+      const y = (0.5 - (clientY - bounds.top) / Math.max(bounds.height, 1)) * viewportHeight;
       return new THREE.Vector3(x, y, 0);
     };
 
     const clientToUv = (clientX: number, clientY: number) => {
-      return new THREE.Vector2(clientX / window.innerWidth, 1 - clientY / window.innerHeight);
+      const bounds = getInteractionBounds();
+
+      return new THREE.Vector2(
+        (clientX - bounds.left) / Math.max(bounds.width, 1),
+        1 - (clientY - bounds.top) / Math.max(bounds.height, 1),
+      );
     };
 
     const handleMouseDown = (event: MouseEvent) => {
@@ -710,21 +743,36 @@ function ClothLayer({
       onDragStateChange(false);
     };
 
-    window.addEventListener("mousedown", handleMouseDown);
+    const interactionElement = interactionRootRef.current;
+
+    if (interactionElement) {
+      interactionElement.addEventListener("mousedown", handleMouseDown);
+      interactionElement.addEventListener("mouseleave", handleMouseLeave);
+    } else {
+      window.addEventListener("mousedown", handleMouseDown);
+      window.addEventListener("mouseleave", handleMouseLeave);
+    }
+
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      window.removeEventListener("mousedown", handleMouseDown);
+      if (interactionElement) {
+        interactionElement.removeEventListener("mousedown", handleMouseDown);
+        interactionElement.removeEventListener("mouseleave", handleMouseLeave);
+      } else {
+        window.removeEventListener("mousedown", handleMouseDown);
+        window.removeEventListener("mouseleave", handleMouseLeave);
+      }
+
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [
     config.cutRadius,
     config.mouseRadius,
     config.mouseStrength,
+    interactionRootRef,
     isActive,
     isPhysicsLayer,
     onDragStateChange,
