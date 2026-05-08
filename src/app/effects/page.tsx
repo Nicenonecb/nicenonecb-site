@@ -5,6 +5,7 @@ import { InfiniteProductCanvas } from "./infinite-product-canvas/infinite-produc
 import { LiquidLayersDraw } from "./liquid-layers-draw/liquid-layers-draw";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
+import { TearableUi } from "./tearable-ui/tearable-ui";
 import styles from "./effects-gallery.module.css";
 
 const effects = [
@@ -53,6 +54,15 @@ const effects = [
     stack: ["PVFS WASM", "WebGL points", "Pointer velocity", "Position fluid"],
     preview: <LiquidLayersDraw variant="preview" />,
   },
+  {
+    href: "/effects/tearable-ui",
+    index: "06",
+    name: "Tearable UI",
+    summary:
+      "参考 pushmatrix tearable：页面内容先绘制成 canvas 纹理，再贴到可变形 cloth 网格；拖拽拉伸会断开约束并重建三角索引，露出下一层页面。",
+    stack: ["React Three Fiber", "CanvasTexture", "Verlet cloth worker", "Triangle index tearing"],
+    preview: <TearableUi variant="preview" />,
+  },
 ];
 
 export const metadata: Metadata = {
@@ -78,7 +88,7 @@ export default function EffectsPage() {
         <p className={styles.eyebrow}>Frontend Effects</p>
         <h1 id="effects-title">Effects Lab</h1>
         <p>
-          当前已整理五个独立效果。每张卡片都包含实时预览、效果描述和技术栈信息，点击进入后可以查看完整版本。
+          当前已整理六个独立效果。每张卡片都包含实时预览、效果描述和技术栈信息，点击进入后可以查看完整版本。
         </p>
       </section>
 
