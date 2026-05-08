@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Nicenonecb | Fullstack Developer",
   description:
-    "Personal portfolio for fullstack work, frontend effects, AI applications, writing, and private productivity systems.",
+    "Personal portfolio for frontend engineering, backend services, visual effects, and AI application infrastructure including Graph RAG, Harness Agent, and KV Cache compression.",
 };
 
 export default function RootLayout({

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GlassPage } from "./glass-page";
 
 export const metadata: Metadata = {
-  title: "glass-page Effect | Nicenonecb",
+  title: "GLASS PAGE Effect | Nicenonecb",
   description:
     "A Three.js fragmented glass experiment with CanvasTexture panels and chromatic edges.",
 };

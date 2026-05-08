@@ -12,7 +12,7 @@ const effects = [
   {
     href: "/effects/glass-page",
     index: "01",
-    name: "glass-page",
+    name: "GLASS PAGE",
     summary:
       "参考 liquid-glass-paralax 的黑场碎片舞台：巨型文字在玻璃层后方漂移，碎片随指针折射、外扩并拉出冷暖色散边。",
     stack: ["Three.js", "MeshPhysicalMaterial"],

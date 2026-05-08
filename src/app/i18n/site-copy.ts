@@ -13,14 +13,14 @@ export const copy = {
     eyebrow: "",
     headline: "Advance relentlessly. Improve endlessly.",
     intro:
-      "I turn complex capabilities into clear product experiences across AI/RAG, backend services, multi-platform interfaces, and interaction details users can actually feel.",
+      "7+ years in frontend engineering and 1+ year in backend services, focused on turning complex technology into polished, production-ready product capabilities. My work spans interaction design, visual effects, and cross-platform experiences, plus AI application infrastructure including Graph RAG, Harness Agent, and KV Cache compression.",
     primaryCta: "View Work",
     secondaryCta: "Contact me",
     profileTitle: "Nicenonecb.snapshot",
     online: "online",
     profile: {
       role: "fullstack developer, frontend-focused",
-      focus: "AI apps, RAG, backend, effects",
+      focus: "effects, AI infrastructure, Graph RAG, Harness Agent",
       stack: "Next.js, NestJS, Go, Electron, React Native, Cloudflare",
       platforms: "web, desktop, mobile",
       status: "employed",
@@ -36,7 +36,7 @@ export const copy = {
       items: [
         {
           href: "/effects/glass-page",
-          name: "GLASSPAGE",
+          name: "GLASS PAGE",
           description: "Fragmented glass panels, chromatic edges, and pointer-reactive depth.",
         },
         {
@@ -58,10 +58,10 @@ export const copy = {
       items: [
         {
           name: "AI Knowledge Base",
-          type: "RAG Application",
+          type: "AI Infrastructure",
           description:
-            "Designed a retrieval flow for documents, answers, citations, and admin review.",
-          stack: "Next.js, NestJS, Vector DB, LLM",
+            "Built core AI application paths across Graph RAG, Harness Agent orchestration, retrieval-generation, and KV Cache compression.",
+          stack: "Next.js, NestJS, Graph RAG, Harness Agent, KV Cache",
         },
         {
           name: "Cross-platform Client",
@@ -106,14 +106,14 @@ export const copy = {
     eyebrow: "",
     headline: "不断进取，无限进步。",
     intro:
-      "我擅长把复杂能力做成清晰好用的产品体验：从 AI/RAG、后端服务到多端界面与交互动效，既能搭建系统，也能打磨用户真正感受到的细节。",
+      "7 年+前端工程经验，1 年+后端服务实践，擅长把复杂技术沉淀为高质感、可落地的产品能力：从页面交互、视觉特效与多端体验，到 AI 应用基础设施、Graph RAG、Harness Agent、KV Cache 压缩等核心链路均有深入实践。",
     primaryCta: "查看项目",
     secondaryCta: "联系我",
     profileTitle: "Nicenonecb.snapshot",
     online: "online",
     profile: {
       role: "全栈开发（偏前端）",
-      focus: "AI 应用、RAG、后端、特效",
+      focus: "特效、AI 基建、Graph RAG、Harness Agent",
       stack: "Next.js、NestJS、Go、Electron、React Native、Cloudflare",
       platforms: "网页端、桌面端、移动端",
       status: "在职",
@@ -129,7 +129,7 @@ export const copy = {
       items: [
         {
           href: "/effects/glass-page",
-          name: "GLASSPAGE",
+          name: "GLASS PAGE",
           description: "玻璃碎片、色散边缘和跟随指针变化的空间层次。",
         },
         {
@@ -151,9 +151,10 @@ export const copy = {
       items: [
         {
           name: "AI Knowledge Base",
-          type: "RAG 应用",
-          description: "设计文档检索、回答生成、引用溯源和后台审核流程。",
-          stack: "Next.js、NestJS、Vector DB、LLM",
+          type: "AI 应用基建",
+          description:
+            "覆盖 Graph RAG、Harness Agent、检索生成与 KV Cache 压缩等 AI 应用核心链路。",
+          stack: "Next.js、NestJS、Graph RAG、Harness Agent、KV Cache",
         },
         {
           name: "Cross-platform Client",
