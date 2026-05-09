@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EffectBackLink } from "../effect-back-link";
 import { TearableUi } from "./tearable-ui";
 
 export const metadata: Metadata = {
@@ -8,5 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function TearableUiPage() {
-  return <TearableUi />;
+  return (
+    <>
+      <EffectBackLink />
+      <TearableUi />
+    </>
+  );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { EffectBackLink } from "../effect-back-link";
 import styles from "../effects-gallery.module.css";
 import { MagneticNav } from "./magnetic-nav";
 
@@ -12,9 +12,7 @@ export const metadata: Metadata = {
 export default function MagneticNavEffectPage() {
   return (
     <main className={styles.page}>
-      <Link className={styles.detailBack} href="/effects">
-        ← back
-      </Link>
+      <EffectBackLink />
 
       <section className={styles.detailShell}>
         <div className={styles.detailIntro}>
