@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EffectBackLink } from "../effect-back-link";
 import { LiquidLayersDraw } from "./liquid-layers-draw";
 
 export const metadata: Metadata = {
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function LiquidLayersDrawPage() {
-  return <LiquidLayersDraw />;
+  return (
+    <>
+      <EffectBackLink />
+      <LiquidLayersDraw />
+    </>
+  );
 }

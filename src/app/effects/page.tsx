@@ -4,6 +4,7 @@ import { GlassPage } from "./glass-page/glass-page";
 import { InfiniteProductCanvas } from "./infinite-product-canvas/infinite-product-canvas";
 import { LiquidLayersDraw } from "./liquid-layers-draw/liquid-layers-draw";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
+import { ProceduralComputer } from "./procedural-computer/procedural-computer";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
 import styles from "./effects-gallery.module.css";
@@ -62,6 +63,15 @@ const effects = [
       "参考 pushmatrix tearable：页面内容先绘制成 canvas 纹理，再贴到可变形 cloth 网格；拖拽拉伸会断开约束并重建三角索引，露出下一层页面。",
     stack: ["React Three Fiber", "CanvasTexture", "Verlet cloth worker", "Triangle index tearing"],
     preview: <TearableUi variant="preview" />,
+  },
+  {
+    href: "/effects/procedural-computer",
+    index: "07",
+    name: "Procedural Computer",
+    summary:
+      "一比一拆解 procedural.computer 的背景特效：WebGL2 中三组旋转椭圆环被 smooth-min 融合，指针生成横竖细线，滚轮与明暗/浮雕 uniform 平滑过渡。",
+    stack: ["WebGL2", "SDF rings", "Pointer crosshair", "Scroll phase", "Emboss shader"],
+    preview: <ProceduralComputer variant="preview" />,
   },
 ];
 

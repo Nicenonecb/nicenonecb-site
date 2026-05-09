@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import type { RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { EffectBackLink } from "../effect-back-link";
 import styles from "./glass-page.module.css";
 
 const TEXTURE_WIDTH = 1440;
@@ -824,9 +824,7 @@ export function GlassPage({ variant = "page" }: GlassPageProps) {
       <div ref={mountRef} className={styles.canvasMount} aria-hidden="true" />
       {webglFailed && <FallbackScene />}
 
-      <Link className={styles.backLink} href="/effects">
-        ← back
-      </Link>
+      <EffectBackLink />
 
       <h1 className={styles.srTitle}>Liquid Glass Design</h1>
       <TextureSource sourceRef={sourceRef} />
