@@ -28,45 +28,6 @@
   font-family: var(--font-geist-mono), monospace;
 }
 
-.homeButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.62rem;
-  color: rgb(155 245 209 / 0.78);
-  font-size: 0.68rem;
-  font-weight: 700;
-  transition:
-    color 160ms ease,
-    transform 160ms ease;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-}
-
-.homeButton:hover {
-  color: #d8fff0;
-  transform: translateX(-2px);
-}
-
-.homeButton span {
-  display: grid;
-  place-items: center;
-  width: 1.65rem;
-  height: 1.65rem;
-  border: 1px solid rgb(155 245 209 / 0.34);
-  background: rgb(155 245 209 / 0.05);
-  color: #9bf5d1;
-  font-size: 0.9rem;
-  letter-spacing: 0;
-  transition:
-    background 160ms ease,
-    border-color 160ms ease;
-}
-
-.homeButton:hover span {
-  border-color: rgb(155 245 209 / 0.74);
-  background: rgb(155 245 209 / 0.13);
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));

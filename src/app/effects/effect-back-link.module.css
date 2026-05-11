@@ -5,11 +5,11 @@
   z-index: 80;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
   min-height: 2.45rem;
   border: 0;
   border-radius: 999px;
-  padding: 0 0.95rem;
+  padding: 0 1rem;
   background: rgb(5 8 9 / 0.58);
   color: rgb(216 255 240 / 0.82);
   -webkit-backdrop-filter: blur(12px);
@@ -41,11 +41,4 @@
 .backLink:focus-visible {
   outline: 2px solid rgb(155 245 209 / 0.58);
   outline-offset: 3px;
-}
-
-.backLink span:first-child {
-  color: currentColor;
-  font-size: 0.9rem;
-  letter-spacing: 0;
-  transform: translateY(-1px);
 }

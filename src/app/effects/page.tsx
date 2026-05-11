@@ -7,6 +7,7 @@ import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
+import { EffectBackLink } from "./effect-back-link";
 import styles from "./effects-gallery.module.css";
 
 const effects = [
@@ -85,10 +86,7 @@ export default function EffectsPage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <Link href="/" className={styles.homeButton}>
-          <span aria-hidden="true">←</span>
-          回到主页
-        </Link>
+        <EffectBackLink href="/" label="返回主页" />
       </header>
 
       <section className={styles.grid} aria-label="Effects list">
