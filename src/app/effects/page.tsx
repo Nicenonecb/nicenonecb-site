@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPage } from "./glass-page/glass-page";
-import { InfiniteProductCanvas } from "./infinite-product-canvas/infinite-product-canvas";
+import { HexPathCard } from "./hex-path-card/hex-path-card";
 import { LiquidLayersDraw } from "./liquid-layers-draw/liquid-layers-draw";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
@@ -39,17 +39,8 @@ const effects = [
     preview: <MagneticNav variant="preview" />,
   },
   {
-    href: "/effects/infinite-product-canvas",
-    index: "04",
-    name: "Infinite Product Canvas",
-    summary:
-      "参考 shop.ize.capital 首页：商品节点铺在世界坐标中，拖拽移动相机，滚轮或双指缩放，点击节点在当前画布下方显示商品详情。",
-    stack: ["Pointer Events", "CSS transform camera", "Wheel / pinch zoom", "Click selection"],
-    preview: <InfiniteProductCanvas variant="preview" />,
-  },
-  {
     href: "/effects/liquid-layers-draw",
-    index: "05",
+    index: "04",
     name: "Liquid Layers",
     summary:
       "一比一参考 grantkot.com/ll 默认效果：黑场底部四色液体层，按住拖拽时形成厚边界、空腔、液柱和回流。",
@@ -58,7 +49,7 @@ const effects = [
   },
   {
     href: "/effects/tearable-ui",
-    index: "06",
+    index: "05",
     name: "Tearable UI",
     summary:
       "参考 pushmatrix tearable：页面内容先绘制成 canvas 纹理，再贴到可变形 cloth 网格；拖拽拉伸会断开约束并重建三角索引，露出下一层页面。",
@@ -67,12 +58,21 @@ const effects = [
   },
   {
     href: "/effects/procedural-computer",
-    index: "07",
+    index: "06",
     name: "Procedural Computer",
     summary:
       "一比一拆解 procedural.computer 的背景特效：WebGL2 中三组旋转椭圆环被 smooth-min 融合，指针生成横竖细线，滚轮与明暗/浮雕 uniform 平滑过渡。",
     stack: ["WebGL2", "SDF rings", "Pointer crosshair", "Scroll phase", "Emboss shader"],
     preview: <ProceduralComputer variant="preview" />,
+  },
+  {
+    href: "/effects/hex-path-card",
+    index: "07",
+    name: "Hex Path",
+    summary:
+      "一比一参考 shaders.com 的 Hex Path 1：黑蓝径向背景、稀疏六边形路径、青蓝霓虹辉光、film grain，以及随鼠标移动强化的亮光路径。",
+    stack: ["WebGL2", "Hex SDF", "Pointer glow", "Chroma flow", "Film grain"],
+    preview: <HexPathCard variant="preview" />,
   },
 ];
 
