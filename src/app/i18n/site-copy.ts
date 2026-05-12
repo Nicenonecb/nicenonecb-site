@@ -96,10 +96,16 @@ export const copy = {
     },
     writing: {
       eyebrow: "Writing",
-      title: "Writing as a second portfolio",
+      title: "Technical notes with working evidence",
       posts: [
-        "How to make a page feel like a product, not a template",
-        "What a frontend-focused fullstack portfolio should prove",
+        {
+          href: "/writing/deepseek-v4-litekv",
+          title: "DeepSeek-V4 attention mechanics and LiteKV validation",
+        },
+        {
+          href: "/writing/ai-memory-harness",
+          title: "From AI memory to Harness engineering",
+        },
       ],
     },
   },
@@ -190,10 +196,16 @@ export const copy = {
     },
     writing: {
       eyebrow: "技术文章",
-      title: "文章会成为你的第二份简历",
+      title: "对技术的一些思考",
       posts: [
-        "如何把一个页面做得像产品而不是模板",
-        "偏前端的全栈作品集应该证明什么",
+        {
+          href: "/writing/deepseek-v4-litekv",
+          title: "DeepSeek-V4 注意力机制与 LiteKV 验证",
+        },
+        {
+          href: "/writing/ai-memory-harness",
+          title: "从 AI 记忆到 Harness 工程：AI Coding 与应用市场落地探讨",
+        },
       ],
     },
   },

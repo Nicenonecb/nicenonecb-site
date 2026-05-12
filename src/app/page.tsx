@@ -324,16 +324,16 @@ export default function Home() {
           </div>
           <div className="divide-y divide-white/10 border-y border-white/10">
             {t.writing.posts.map((post, index) => (
-              <a
+              <Link
                 className="flex items-center justify-between gap-6 py-5 transition hover:text-emerald-300"
-                href="#writing"
-                key={post}
+                href={post.href}
+                key={post.href}
               >
-                <span className="text-zinc-200">{post}</span>
+                <span className="text-zinc-200">{post.title}</span>
                 <span className="font-mono text-xs text-zinc-600">
                   0{index + 1}
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </section>
