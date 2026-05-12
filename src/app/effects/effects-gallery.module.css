@@ -92,6 +92,12 @@
   border: 0;
 }
 
+.previewFrame :global([data-effect="living-matter-card"]) {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
 .cardBody {
   display: grid;
   align-content: start;
@@ -214,6 +220,10 @@
 }
 
 .detailStage :global([data-effect="hex-path-card"]) {
+  border: 0;
+}
+
+.detailStage :global([data-effect="living-matter-card"]) {
   border: 0;
 }
 

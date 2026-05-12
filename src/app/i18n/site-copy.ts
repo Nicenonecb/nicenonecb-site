@@ -4,7 +4,6 @@ export const navItems = [
   { href: "/effects", id: "effects", en: "Effects", zh: "特效", featured: true },
   { id: "work", en: "Work", zh: "项目" },
   { id: "writing", en: "Writing", zh: "文章" },
-  { id: "todo", en: "Todo", zh: "待办" },
 ];
 
 // 首页文案集中维护，确保中英文切换时结构一致。
@@ -54,7 +53,7 @@ export const copy = {
     work: {
       eyebrow: "Selected Work",
       title: "End-to-end project experience",
-      count: "005 entries",
+      count: "004 entries",
       pendingDialog: {
         eyebrow: "Project status",
         title: "In development...",
@@ -93,13 +92,6 @@ export const copy = {
             "Built shared product workflows across browser, Electron, and React Native clients.",
           stack: "React, Electron, React Native",
         },
-        {
-          name: "Private Ops System",
-          type: "Fullstack System",
-          description:
-            "A private task and progress system with protected access and persistent data.",
-          stack: "Cloudflare Access, D1, Workers",
-        },
       ],
     },
     writing: {
@@ -108,20 +100,6 @@ export const copy = {
       posts: [
         "How to make a page feel like a product, not a template",
         "What a frontend-focused fullstack portfolio should prove",
-        "From todolist to a personal operating system",
-      ],
-    },
-    todo: {
-      eyebrow: "Private System",
-      title: "A locked personal todo system",
-      description:
-        "This area will be protected by Cloudflare Access and D1. Public visitors will not see private tasks or progress records.",
-      preview: "todo.preview",
-      locked: "locked",
-      items: [
-        ["Complete personal intro", "active"],
-        ["Upload frontend effect demos", "next"],
-        ["Deploy to Cloudflare", "queued"],
       ],
     },
   },
@@ -170,7 +148,7 @@ export const copy = {
     work: {
       eyebrow: "项目经历",
       title: "完整项目经验",
-      count: "005 entries",
+      count: "004 entries",
       pendingDialog: {
         eyebrow: "项目状态",
         title: "正在研发中...",
@@ -208,12 +186,6 @@ export const copy = {
             "构建覆盖浏览器、Electron 和 React Native 的多端产品工作流。",
           stack: "React、Electron、React Native",
         },
-        {
-          name: "Private Ops System",
-          type: "全栈系统",
-          description: "只对本人开放的任务、记录和进度系统，带登录保护和持久化。",
-          stack: "Cloudflare Access、D1、Workers",
-        },
       ],
     },
     writing: {
@@ -222,20 +194,6 @@ export const copy = {
       posts: [
         "如何把一个页面做得像产品而不是模板",
         "偏前端的全栈作品集应该证明什么",
-        "从 todolist 到个人操作系统",
-      ],
-    },
-    todo: {
-      eyebrow: "私人系统",
-      title: "Todolist 只对本人开放",
-      description:
-        "后续会把这里接入 Cloudflare Access 和 D1，用登录保护 /admin 区域，公开访客看不到任务和记录。",
-      preview: "todo.preview",
-      locked: "locked",
-      items: [
-        ["完善个人介绍", "active"],
-        ["上传特效项目", "next"],
-        ["部署到 Cloudflare", "queued"],
       ],
     },
   },

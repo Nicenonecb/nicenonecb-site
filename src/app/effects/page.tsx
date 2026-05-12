@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPage } from "./glass-page/glass-page";
 import { HexPathCard } from "./hex-path-card/hex-path-card";
+import { LivingMatterCard } from "./living-matter-card/living-matter-card";
 import { LiquidLayersDraw } from "./liquid-layers-draw/liquid-layers-draw";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
@@ -43,7 +44,7 @@ const effects = [
     index: "04",
     name: "Liquid Layers",
     summary:
-      "一比一参考 grantkot.com/ll 默认效果：黑场底部四色液体层，按住拖拽时形成厚边界、空腔、液柱和回流。",
+      "参考 grantkot.com/ll 默认效果：黑场底部四色液体层，按住拖拽时形成厚边界、空腔、液柱和回流。",
     stack: ["PVFS WASM", "WebGL points", "Pointer velocity", "Position fluid"],
     preview: <LiquidLayersDraw variant="preview" />,
   },
@@ -61,7 +62,7 @@ const effects = [
     index: "06",
     name: "Procedural Computer",
     summary:
-      "一比一拆解 procedural.computer 的背景特效：WebGL2 中三组旋转椭圆环被 smooth-min 融合，指针生成横竖细线，滚轮与明暗/浮雕 uniform 平滑过渡。",
+      "拆解 procedural.computer 的背景特效：WebGL2 中三组旋转椭圆环被 smooth-min 融合，指针生成横竖细线，滚轮与明暗/浮雕 uniform 平滑过渡。",
     stack: ["WebGL2", "SDF rings", "Pointer crosshair", "Scroll phase", "Emboss shader"],
     preview: <ProceduralComputer variant="preview" />,
   },
@@ -70,9 +71,18 @@ const effects = [
     index: "07",
     name: "Hex Path",
     summary:
-      "一比一参考 shaders.com 的 Hex Path 1：黑蓝径向背景、稀疏六边形路径、青蓝霓虹辉光、film grain，以及随鼠标移动强化的亮光路径。",
+      "参考 shaders.com 的 Hex Path 1：黑蓝径向背景、稀疏六边形路径、青蓝霓虹辉光、film grain，以及随鼠标移动强化的亮光路径。",
     stack: ["WebGL2", "Hex SDF", "Pointer glow", "Chroma flow", "Film grain"],
     preview: <HexPathCard variant="preview" />,
+  },
+  {
+    href: "/effects/living-matter-card",
+    index: "08",
+    name: "Living Matter",
+    summary:
+      "参考 X 视频的 metaball 网页转场：HTML-like 页面先绘入 canvas texture，再由 WebGL2 体积 blob 做折射、显现、吞没和 start 回环。",
+    stack: ["HTML-in-canvas", "WebGL2", "Metaball SDF", "Texture refraction", "Live input"],
+    preview: <LivingMatterCard variant="preview" />,
   },
 ];
 

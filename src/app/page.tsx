@@ -338,39 +338,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="todo"
-          className="grid gap-8 border-t border-white/10 py-14 md:grid-cols-[1fr_1fr]"
-        >
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.28em] text-zinc-500">
-              {t.todo.eyebrow}
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold text-zinc-100">
-              {t.todo.title}
-            </h2>
-            <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-400">
-              {t.todo.description}
-            </p>
-          </div>
-          <div className="border border-white/10 bg-black/45 p-5 font-mono">
-            <div className="mb-4 flex items-center justify-between text-xs text-zinc-500">
-              <span>{t.todo.preview}</span>
-              <span className="text-amber-300">{t.todo.locked}</span>
-            </div>
-            <div className="space-y-3 text-sm">
-              {t.todo.items.map(([label, status]) => (
-                <div
-                  className="flex items-center justify-between gap-4 border border-white/10 px-4 py-3"
-                  key={label}
-                >
-                  <span className="text-zinc-300">{label}</span>
-                  <span className="text-zinc-600">{status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
       </div>
       {pendingProjectName ? (
         <div

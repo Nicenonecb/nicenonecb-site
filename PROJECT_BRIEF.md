@@ -2,7 +2,7 @@
 
 ## 项目目标
 
-这是一个个人求职向网站，用来集中展示个人介绍、技术文章、前端特效项目，以及一个只允许本人访问的 todolist 系统。
+这是一个个人求职向网站，用来集中展示个人介绍、技术文章和前端特效项目。
 
 网站需要既能作为简历补充，也能作为长期维护的个人内容和作品展示空间。
 
@@ -16,14 +16,6 @@
 - 展示前端特效项目，包括动效、Canvas、WebGL、Three.js、交互实验等。
 - 每个项目应包含项目说明、技术栈、难点、截图或在线预览链接。
 
-### 私密区域
-
-- 网站需要包含 todolist 功能。
-- todolist 只能被本人看到，不能对公开访客暴露。
-- todolist 需要保存任务记录，包括创建、完成、恢复、归档等历史。
-- 私密区域建议放在 `/admin` 或 `/admin/todos` 下。
-- 私密权限不能只依赖前端隐藏，需要服务端和数据库层一起保护。
-
 ## 推荐技术栈
 
 ### 第一阶段
@@ -33,19 +25,14 @@
 - Tailwind CSS
 - MDX
 - Cloudflare Pages / Workers
-- Cloudflare D1
-- Cloudflare Access
 
 ### 技术选择说明
 
-- Next.js 用于统一处理页面、路由、文章、项目展示和后续后台功能。
+- Next.js 用于统一处理页面、路由、文章和项目展示。
 - TypeScript 保证项目结构清晰，适合长期维护。
 - Tailwind CSS 用于快速实现克制、现代、响应式的界面。
 - MDX 用于早期文章发布，方便直接在代码仓库中管理文章。
 - Cloudflare Pages / Workers 用于免费优先的部署方案。
-- Cloudflare D1 用于保存 todolist 和任务历史。
-- Cloudflare Access 用于保护 `/admin` 私密区域，限制只有本人邮箱可访问。
-
 ## 页面结构草案
 
 ```text
@@ -56,48 +43,7 @@
 /labs
 /blog
 /blog/[slug]
-/admin
-/admin/todos
-/admin/todos/history
 ```
-
-## 数据库草案
-
-### todos
-
-```text
-id
-user_id
-title
-detail
-status
-priority
-due_at
-completed_at
-created_at
-updated_at
-```
-
-### todo_events
-
-```text
-id
-todo_id
-user_id
-event_type
-note
-created_at
-```
-
-## 隐私策略
-
-todolist 的隐私保护需要分三层：
-
-1. `/admin` 路由需要登录。
-2. 服务端接口需要验证当前访问者身份。
-3. 数据库查询只能返回本人数据。
-
-第一版可以优先使用 Cloudflare Access 限制本人邮箱访问，后续再根据需要扩展自定义登录系统。
 
 ## UI 设计方向
 
@@ -120,7 +66,7 @@ todolist 的隐私保护需要分三层：
 - 页面滚动自然，动效克制。
 - 项目展示可以适度使用 Canvas、WebGL、Three.js 或细腻 hover 效果。
 - 首页第一屏要快速传达身份、技术方向和可联系状态。
-- 公开区域保持专业，私密 todolist 区域保持工具化、效率化。
+- 公开区域保持专业，突出作品、文章和工程能力。
 
 ## 开发阶段建议
 
@@ -135,13 +81,9 @@ todolist 的隐私保护需要分三层：
 
 - 接入 Cloudflare 部署。
 - 配置自定义域名。
-- 接入 Cloudflare Access。
-- 创建 D1 数据库。
-- 实现私密 todolist。
 
 ### Phase 3
 
-- 增加 todolist 历史记录。
 - 增加文章标签和搜索。
 - 增加项目在线 demo。
 - 增加简历 PDF 下载。
