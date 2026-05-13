@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-article-markdown.mjs",
+    "prebuild:next": "node scripts/generate-article-markdown.mjs",
+    "predev": "node scripts/generate-article-markdown.mjs",
     "build": "opennextjs-cloudflare build",
     "build:next": "next build",
     "dev": "next dev -p 5888",

@@ -1,14 +1,13 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
+import { articleMarkdownByFile } from "../content/articles/markdown";
+
+type ArticleFile = keyof typeof articleMarkdownByFile;
 
 export type Article = {
   description: string;
-  file: string;
+  file: ArticleFile;
   slug: string;
   title: string;
 };
-
-const articlesDirectory = path.join(process.cwd(), "src/content/articles");
 
 export const articles: Article[] = [
   {
@@ -32,7 +31,7 @@ export function getArticle(slug: string) {
     return null;
   }
 
-  const markdown = readFileSync(path.join(articlesDirectory, article.file), "utf8");
+  const markdown = articleMarkdownByFile[article.file];
 
   return {
     ...article,

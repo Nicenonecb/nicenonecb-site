@@ -10,6 +10,7 @@ const eslintConfig = defineConfig([
     // Default ignores of eslint-config-next:
     ".next/**",
     ".open-next/**",
+    ".wrangler/**",
     "out/**",
     "build/**",
     "public/effects/liquid-layers-draw/pvfs2d_v2_7.js",
