@@ -6,6 +6,7 @@ import { LivingMatterCard } from "./living-matter-card/living-matter-card";
 import { LiquidLayersDraw } from "./liquid-layers-draw/liquid-layers-draw";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
+import { QuantumNeuralNetwork } from "./quantum-neural-network/quantum-neural-network";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
 import { EffectBackLink } from "./effect-back-link";
@@ -83,6 +84,15 @@ const effects = [
       "参考 X 视频的 metaball 网页转场：HTML-like 页面先绘入 canvas texture，再由 WebGL2 体积 blob 做折射、显现、吞没和 start 回环。",
     stack: ["HTML-in-canvas", "WebGL2", "Metaball SDF", "Texture refraction", "Live input"],
     preview: <LivingMatterCard variant="preview" />,
+  },
+  {
+    href: "/effects/quantum-neural-network",
+    index: "09",
+    name: "Quantum Neural Network",
+    summary:
+      "参考 VoXelo 的 CodePen：黑场星云中漂浮的 3D 神经网络，玻璃控制面板切换主题、密度和结构，点击会向节点连线发送能量脉冲。",
+    stack: ["Three.js", "OrbitControls", "UnrealBloomPass", "ShaderMaterial", "Energy pulses"],
+    preview: <QuantumNeuralNetwork variant="preview" />,
   },
 ];
 
