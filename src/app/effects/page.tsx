@@ -4,6 +4,7 @@ import { GlassPage } from "./glass-page/glass-page";
 import { HexPathCard } from "./hex-path-card/hex-path-card";
 import { LivingMatterCard } from "./living-matter-card/living-matter-card";
 import { LiquidLayersDraw } from "./liquid-layers-draw/liquid-layers-draw";
+import { LiquidMetalButton } from "./liquid-metal-button/liquid-metal-button";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
 import { QuantumNeuralNetwork } from "./quantum-neural-network/quantum-neural-network";
@@ -93,6 +94,15 @@ const effects = [
       "参考 VoXelo 的 CodePen：黑场星云中漂浮的 3D 神经网络，玻璃控制面板切换主题、密度和结构，点击会向节点连线发送能量脉冲。",
     stack: ["Three.js", "OrbitControls", "UnrealBloomPass", "ShaderMaterial", "Energy pulses"],
     preview: <QuantumNeuralNetwork variant="preview" />,
+  },
+  {
+    href: "/effects/liquid-metal-button",
+    index: "10",
+    name: "Liquid Metal Button",
+    summary:
+      "参考 Muhannad Hassan 的 Liquid metal button：黑色胶囊轨道承载灰色图标与圆形金属按钮，hover/focus 时 WebGL 液态高光与同色系金属圆环一起被激活。",
+    stack: ["WebGL2", "CSS masks", "Pointer easing", "Chrome hover ring", "Accessible button"],
+    preview: <LiquidMetalButton variant="preview" />,
   },
 ];
 

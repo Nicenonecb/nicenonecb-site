@@ -1,0 +1,765 @@
+.shell {
+  --track-width: min(70rem, 78vw);
+  --track-padding: clamp(1.1rem, 2.9vw, 2rem);
+  --button-size: clamp(12rem, 31vw, 24rem);
+  --icon-size: clamp(5.2rem, 13vw, 12rem);
+  --gap-size: clamp(1.6rem, 6vw, 7rem);
+  --accent-cyan: 34 211 238;
+  --accent-red: 248 113 113;
+  --accent-gold: 251 191 36;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: var(--liquid-metal-min-height, 40rem);
+  overflow: hidden;
+  background:
+    linear-gradient(112deg, rgb(255 255 255 / 0.06) 0 1px, transparent 1px 10px),
+    radial-gradient(ellipse at 74% 48%, rgb(var(--accent-cyan) / 0.12), transparent 28rem),
+    linear-gradient(135deg, #202120 0%, #0d1011 44%, #030405 100%);
+  color: #f6f4ee;
+  isolation: isolate;
+}
+
+.shell::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(rgb(255 255 255 / 0.028) 1px, transparent 1px),
+    repeating-linear-gradient(90deg, transparent 0 5.75rem, rgb(var(--accent-red) / 0.1) 5.75rem 5.82rem);
+  background-size: 42px 42px;
+  content: "";
+  mask-image: radial-gradient(circle at 74% 50%, black, transparent 72%);
+}
+
+.shell::after {
+  position: absolute;
+  inset: 12% -18%;
+  z-index: -1;
+  background: conic-gradient(
+    from 115deg at 74% 48%,
+    transparent 0deg,
+    rgb(var(--accent-cyan) / 0.12) 42deg,
+    transparent 83deg,
+    rgb(var(--accent-red) / 0.1) 154deg,
+    transparent 221deg,
+    rgb(var(--accent-gold) / 0.1) 284deg,
+    transparent 360deg
+  );
+  content: "";
+  filter: blur(0.6rem);
+  opacity: 0;
+  animation: shellSweep 12s linear infinite;
+  transition: opacity 280ms ease;
+}
+
+.shell[data-active="true"]::after,
+.shell:has(.liquidButton:hover)::after,
+.shell:has(.liquidButton:focus-visible)::after {
+  opacity: 0.28;
+}
+
+.textBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-size);
+  width: var(--track-width);
+  max-width: calc(100% - 2rem);
+  min-height: calc(var(--button-size) + var(--track-padding) * 1.75);
+  margin-left: max(-8rem, -10vw);
+  padding: var(--track-padding);
+  border: 1px solid rgb(255 255 255 / 0.11);
+  border-radius: 0 999px 999px 0;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.12), transparent 17%),
+    linear-gradient(90deg, rgb(var(--accent-cyan) / 0.1), transparent 33%),
+    linear-gradient(90deg, #050607 0%, #111313 48%, #020303 100%);
+  box-shadow:
+    inset 0 0.32rem 0 0 rgb(255 255 255 / 0.2),
+    inset 0 -0.12rem 0 rgb(255 255 255 / 0.07),
+    inset 0 0 4.6rem rgb(255 255 255 / 0.035),
+    0 2rem 5rem rgb(0 0 0 / 0.42);
+  transform: translateZ(0);
+  transition:
+    border-color 240ms ease,
+    box-shadow 240ms ease,
+    transform 240ms ease;
+}
+
+.shell[data-active="true"] .textBox,
+.shell:has(.liquidButton:hover) .textBox,
+.shell:has(.liquidButton:focus-visible) .textBox {
+  border-color: rgb(255 255 255 / 0.18);
+  box-shadow:
+    inset 0 0.32rem 0 0 rgb(255 255 255 / 0.22),
+    inset 0 -0.12rem 0 rgb(255 255 255 / 0.1),
+    inset 0 0 5.6rem rgb(var(--accent-cyan) / 0.045),
+    0 2rem 5rem rgb(0 0 0 / 0.42),
+    0 0 3rem rgb(var(--accent-cyan) / 0.045);
+  transform: translateX(-0.2rem);
+}
+
+.textBox::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 1.4rem, rgb(255 255 255 / 0.05) 1.4rem 1.45rem),
+    linear-gradient(90deg, transparent 0 58%, rgb(255 255 255 / 0.12) 72%, transparent 86%);
+  content: "";
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.textBox::after {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--button-size) * 0.78);
+  left: clamp(2rem, 12vw, 12rem);
+  height: clamp(0.35rem, 0.9vw, 0.7rem);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, transparent, rgb(var(--accent-cyan) / 0.78), rgb(var(--accent-gold) / 0.86), transparent),
+    linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent);
+  box-shadow:
+    0 0 1.2rem rgb(var(--accent-cyan) / 0.26),
+    0 0 2.8rem rgb(var(--accent-gold) / 0.16);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease,
+    transform 220ms ease;
+}
+
+.shell[data-active="true"] .textBox::after,
+.shell:has(.liquidButton:hover) .textBox::after,
+.shell:has(.liquidButton:focus-visible) .textBox::after {
+  filter: saturate(1.08);
+  opacity: 0.5;
+  transform: translateY(-50%) scaleX(1.02);
+}
+
+.trackPulse {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--button-size) * 0.58);
+  left: clamp(4.6rem, 22vw, 21rem);
+  z-index: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.82), transparent);
+  box-shadow:
+    0 0 0.9rem rgb(var(--accent-cyan) / 0.4),
+    0 0 1.9rem rgb(var(--accent-gold) / 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scaleX(0.3);
+  transform-origin: right center;
+  transition:
+    opacity 220ms ease,
+    transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.shell[data-active="true"] .trackPulse,
+.shell:has(.liquidButton:hover) .trackPulse,
+.shell:has(.liquidButton:focus-visible) .trackPulse {
+  opacity: 0.58;
+  transform: translateY(-50%) scaleX(0.92);
+}
+
+.energyOrb {
+  position: absolute;
+  z-index: 2;
+  width: clamp(0.75rem, 1.7vw, 1.3rem);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 32% 26%, #fff, rgb(224 252 255 / 0.78) 24%, rgb(var(--accent-cyan) / 0.5) 46%, rgb(var(--accent-cyan) / 0) 72%),
+    rgb(var(--accent-cyan) / 0.4);
+  box-shadow:
+    0 0 0.7rem rgb(var(--accent-cyan) / 0.26),
+    0 0 1.5rem rgb(var(--accent-cyan) / 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0) scale(0.2);
+  transition:
+    opacity 240ms ease,
+    transform 360ms cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+
+.orbOne {
+  right: calc(var(--button-size) * 0.98);
+  top: 31%;
+}
+
+.orbTwo {
+  right: calc(var(--button-size) * 1.26);
+  top: 54%;
+  width: clamp(0.52rem, 1.2vw, 0.92rem);
+  background:
+    radial-gradient(circle at 32% 26%, #fff, rgb(255 245 196 / 0.84) 25%, rgb(var(--accent-gold) / 0.5) 50%, transparent 74%),
+    rgb(var(--accent-gold) / 0.3);
+  box-shadow:
+    0 0 0.8rem rgb(var(--accent-gold) / 0.38),
+    0 0 1.9rem rgb(var(--accent-gold) / 0.16);
+}
+
+.orbThree {
+  right: calc(var(--button-size) * 0.64);
+  top: 67%;
+  width: clamp(0.44rem, 1vw, 0.72rem);
+  background:
+    radial-gradient(circle at 32% 26%, #fff, rgb(255 214 214 / 0.75) 28%, rgb(var(--accent-red) / 0.45) 50%, transparent 74%),
+    rgb(var(--accent-red) / 0.28);
+  box-shadow:
+    0 0 0.8rem rgb(var(--accent-red) / 0.34),
+    0 0 1.9rem rgb(var(--accent-red) / 0.14);
+}
+
+.shell[data-active="true"] .energyOrb,
+.shell:has(.liquidButton:hover) .energyOrb,
+.shell:has(.liquidButton:focus-visible) .energyOrb {
+  opacity: 0.56;
+  transform: translate3d(0, 0, 0) scale(1);
+  animation: orbFloat 3.8s ease-in-out infinite;
+}
+
+.shell[data-active="true"] .orbTwo,
+.shell:has(.liquidButton:hover) .orbTwo,
+.shell:has(.liquidButton:focus-visible) .orbTwo {
+  animation-delay: -0.7s;
+  transform: translate3d(0.45rem, -0.15rem, 0) scale(1);
+}
+
+.shell[data-active="true"] .orbThree,
+.shell:has(.liquidButton:hover) .orbThree,
+.shell:has(.liquidButton:focus-visible) .orbThree {
+  animation-delay: -1.4s;
+  transform: translate3d(-0.2rem, 0.28rem, 0) scale(1);
+}
+
+.sideIcon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: var(--icon-size);
+  color: rgb(229 231 235 / 0.34);
+  filter: drop-shadow(0 1.1rem 1.2rem rgb(0 0 0 / 0.5));
+  transition:
+    color 240ms ease,
+    filter 240ms ease,
+    transform 240ms ease;
+}
+
+.shell[data-active="true"] .sideIcon,
+.shell:has(.liquidButton:hover) .sideIcon,
+.shell:has(.liquidButton:focus-visible) .sideIcon {
+  color: rgb(229 231 235 / 0.48);
+  filter:
+    drop-shadow(0 1.1rem 1.2rem rgb(0 0 0 / 0.5))
+    drop-shadow(0 0 1.4rem rgb(var(--accent-cyan) / 0.16));
+}
+
+.sideIcon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: currentColor;
+}
+
+.attachment {
+  transform: rotate(70deg);
+}
+
+.shell[data-active="true"] .attachment,
+.shell:has(.liquidButton:hover) .attachment,
+.shell:has(.liquidButton:focus-visible) .attachment {
+  transform: rotate(64deg) translateX(0.18rem);
+}
+
+.sparkles {
+  transform: rotate(180deg);
+}
+
+.shell[data-active="true"] .sparkles,
+.shell:has(.liquidButton:hover) .sparkles,
+.shell:has(.liquidButton:focus-visible) .sparkles {
+  transform: rotate(192deg) translateX(0.2rem) scale(1.05);
+}
+
+.liquidButton {
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: var(--button-size);
+  height: var(--button-size);
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  background: transparent;
+  color: rgb(223 230 232 / 0.68);
+  cursor: pointer;
+  outline: none;
+  transform: translateZ(0);
+  transition:
+    color 220ms ease,
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+.liquidButton::before {
+  position: absolute;
+  z-index: 1;
+  inset: 7.8%;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 0.46), transparent 28%),
+    linear-gradient(180deg, #494b4a, #030405 68%, #000);
+  box-shadow:
+    inset 0 0.18rem 0.2rem 0.18rem rgb(255 255 255 / 0.34),
+    inset 0 -1.2rem 2.4rem rgb(0 0 0 / 0.65),
+    0 1.4rem 3rem rgb(0 0 0 / 0.56);
+  content: "";
+  transition:
+    box-shadow 240ms ease,
+    transform 240ms ease;
+}
+
+.liquidButton:hover::before,
+.liquidButton:focus-visible::before {
+  box-shadow:
+    inset 0 0.18rem 0.2rem 0.18rem rgb(255 255 255 / 0.38),
+    inset 0 -1.2rem 2.4rem rgb(0 0 0 / 0.65),
+    0 1.4rem 3rem rgb(0 0 0 / 0.56),
+    0 0 3.8rem rgb(var(--accent-cyan) / 0.1);
+  transform: scale(1.008);
+}
+
+.liquidButton:hover,
+.liquidButton:focus-visible {
+  color: #f5fbff;
+  filter: brightness(1.08) saturate(1.02);
+  transform: scale(1.012);
+}
+
+.liquidButton[data-pressed="true"] {
+  transform: scale(0.985) rotate(0.4deg);
+}
+
+.liquidButton:focus-visible .outline {
+  box-shadow:
+    0 0 0 0.18rem rgb(255 255 255 / 0.18),
+    0 0 2rem rgb(var(--accent-cyan) / 0.44);
+}
+
+.prismTail,
+.auraField,
+.buttonHalo,
+.shockRing,
+.metalCanvas,
+.metalBase,
+.innerLens,
+.outline,
+.sparkBelt,
+.energyRing,
+.scanLine,
+.arrowIcon {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.prismTail {
+  z-index: 0;
+  top: 50%;
+  right: 55%;
+  left: auto;
+  width: min(24rem, calc(var(--button-size) * 1.18));
+  height: 0.18rem;
+  border-radius: 999px 0 0 999px;
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-cyan) / 0.18), rgb(255 255 255 / 0.5));
+  box-shadow: 0 0 1.2rem rgb(var(--accent-cyan) / 0.16);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scaleX(0.16);
+  transform-origin: right center;
+  transition:
+    opacity 280ms ease,
+    transform 420ms cubic-bezier(0.15, 0.85, 0.2, 1),
+    filter 280ms ease;
+}
+
+.shell[data-active="true"] .prismTail,
+.liquidButton:hover .prismTail,
+.liquidButton:focus-visible .prismTail {
+  opacity: 0.42;
+  filter: blur(0.18rem) saturate(1.15);
+  transform: translateY(-50%) scaleX(0.86);
+}
+
+.auraField {
+  z-index: 5;
+  inset: -11%;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background:
+    radial-gradient(circle at 34% 30%, rgb(255 255 255 / 0.18), transparent 18%),
+    radial-gradient(circle, transparent 0 61%, rgb(var(--accent-cyan) / 0.16) 62%, transparent 72%);
+  box-shadow:
+    0 0 0.9rem rgb(255 255 255 / 0.08),
+    0 0 2.2rem rgb(var(--accent-cyan) / 0.12);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.62) rotate(-18deg);
+  transition:
+    opacity 240ms ease,
+    transform 520ms cubic-bezier(0.18, 0.9, 0.2, 1);
+}
+
+.shell[data-active="true"] .auraField,
+.liquidButton:hover .auraField,
+.liquidButton:focus-visible .auraField {
+  opacity: 0.72;
+  transform: scale(1.02) rotate(0deg);
+}
+
+.buttonHalo {
+  z-index: 5;
+  inset: -17%;
+  border: 1px solid rgb(var(--accent-cyan) / 0.18);
+  background: radial-gradient(circle, transparent 0 59%, rgb(255 255 255 / 0.12) 61%, transparent 72%);
+  box-shadow:
+    0 0 1rem rgb(255 255 255 / 0.09),
+    0 0 3rem rgb(var(--accent-cyan) / 0.12),
+    inset 0 0 1.4rem rgb(255 255 255 / 0.05);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: scale(0.68) rotate(-12deg);
+  transition:
+    opacity 260ms ease,
+    transform 260ms ease;
+}
+
+.shell[data-active="true"] .buttonHalo,
+.liquidButton:hover .buttonHalo,
+.liquidButton:focus-visible .buttonHalo {
+  opacity: 0.42;
+  transform: scale(1.02) rotate(0deg);
+}
+
+.shockRing {
+  z-index: 7;
+  inset: -7%;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  background: transparent;
+  box-shadow:
+    0 0 0.7rem rgb(255 255 255 / 0.1),
+    0 0 1.8rem rgb(var(--accent-cyan) / 0.11);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.78);
+}
+
+.shell[data-active="true"] .shockRing,
+.liquidButton:hover .shockRing,
+.liquidButton:focus-visible .shockRing {
+  opacity: 0.36;
+}
+
+.sparkBelt {
+  z-index: 9;
+  inset: 8%;
+  border: 1px dashed rgb(255 255 255 / 0.16);
+  background: transparent;
+  box-shadow: 0 0 0.8rem rgb(var(--accent-cyan) / 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transform: rotate(-24deg) scale(0.9);
+  transition:
+    opacity 180ms ease,
+    transform 300ms ease;
+}
+
+.shell[data-active="true"] .sparkBelt,
+.liquidButton:hover .sparkBelt,
+.liquidButton:focus-visible .sparkBelt {
+  opacity: 0.3;
+  transform: rotate(0deg) scale(1);
+}
+
+.metalCanvas {
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  mix-blend-mode: screen;
+  opacity: 0.98;
+}
+
+.metalBase {
+  z-index: 2;
+  inset: 4.6%;
+  background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgb(255 255 255 / 0.24), transparent 22%),
+    radial-gradient(circle at 36% 26%, rgb(255 255 255 / 0.22), transparent 20%),
+    radial-gradient(circle at 67% 74%, rgb(0 0 0 / 0.62), transparent 34%),
+    linear-gradient(180deg, #444, #050505 64%, #000);
+}
+
+.innerLens {
+  z-index: 4;
+  inset: 18%;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgb(var(--accent-cyan) / 0.22), transparent 28%),
+    conic-gradient(from 240deg, transparent, rgb(255 255 255 / 0.1), transparent 38%, rgb(var(--accent-red) / 0.1), transparent 70%);
+  filter: blur(0.015rem);
+  mask-image: radial-gradient(circle, transparent 0 44%, black 45%, black 62%, transparent 64%);
+  pointer-events: none;
+  opacity: 0.34;
+  transition: opacity 220ms ease;
+}
+
+.liquidButton:hover .innerLens,
+.liquidButton:focus-visible .innerLens {
+  opacity: 0.9;
+}
+
+.outline {
+  z-index: 8;
+  padding: 0.34rem;
+  background: conic-gradient(
+    from 180deg,
+    #08090a,
+    #27d5ff,
+    #f7f3df,
+    #ff5d69,
+    #f5c451,
+    #14171b,
+    #08090a
+  );
+  filter: brightness(0.58) contrast(1.12);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  transition:
+    filter 260ms ease,
+    padding 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.liquidButton:hover .outline,
+.liquidButton:focus-visible .outline {
+  padding: 0.4rem;
+  filter: brightness(1.12) contrast(1.06) saturate(1.05);
+  box-shadow:
+    0 0 1.2rem rgb(232 230 220 / 0.14),
+    0 0 2.2rem rgb(var(--accent-cyan) / 0.12);
+}
+
+.energyRing {
+  z-index: 10;
+  inset: 10%;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  background:
+    conic-gradient(from 0deg, transparent 0 21%, rgb(255 255 255 / 0.42) 23%, transparent 26% 64%, rgb(var(--accent-cyan) / 0.42) 66%, transparent 69%),
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgb(var(--accent-gold) / 0.16), transparent 32%);
+  mask-image: radial-gradient(circle, transparent 0 57%, black 58%, black 61%, transparent 63%);
+  opacity: 0;
+  pointer-events: none;
+  animation: ringSpin 4.5s linear infinite reverse;
+  transition: opacity 240ms ease;
+}
+
+.liquidButton:hover .energyRing,
+.liquidButton:focus-visible .energyRing {
+  opacity: 0.46;
+}
+
+.scanLine {
+  z-index: 11;
+  inset: 13%;
+  background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.62) 50%, transparent 62%);
+  filter: blur(0.12rem);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-22%) rotate(8deg);
+  transition: opacity 180ms ease;
+}
+
+.liquidButton:hover .scanLine,
+.liquidButton:focus-visible .scanLine {
+  opacity: 0.28;
+}
+
+.arrowIcon {
+  z-index: 12;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.arrowIcon svg {
+  width: 24%;
+  fill: currentColor;
+  transform: rotate(-45deg);
+  filter:
+    drop-shadow(0 0 0.7rem rgb(255 255 255 / 0.16))
+    drop-shadow(0 0 1.4rem rgb(var(--accent-cyan) / 0.12));
+  transition:
+    fill 220ms ease,
+    transform 220ms ease;
+}
+
+.liquidButton:hover .arrowIcon svg,
+.liquidButton:focus-visible .arrowIcon svg {
+  transform: rotate(-45deg) translate(0.16rem, -0.16rem) scale(1.06);
+}
+
+.shell[data-variant="preview"] {
+  --track-width: min(33rem, 118%);
+  --button-size: clamp(7.2rem, 24vw, 11.2rem);
+  --icon-size: clamp(3rem, 9vw, 5.4rem);
+  --gap-size: clamp(0.8rem, 3vw, 2rem);
+  --track-padding: clamp(0.7rem, 2vw, 1rem);
+
+  min-height: 0;
+}
+
+.shell[data-variant="preview"] .textBox {
+  margin-left: -4rem;
+}
+
+@media (max-width: 760px) {
+  .shell {
+    --track-width: calc(100% - 1rem);
+    --button-size: clamp(8.6rem, 32vw, 10.7rem);
+    --icon-size: clamp(2.8rem, 12vw, 4.1rem);
+    --gap-size: clamp(0.55rem, 2.7vw, 1rem);
+    --track-padding: clamp(0.65rem, 2vw, 0.9rem);
+
+    min-height: min(34rem, 76svh);
+  }
+
+  .textBox {
+    max-width: calc(100% - 1rem);
+    margin-left: 0;
+  }
+
+  .textBox::after {
+    left: clamp(1.2rem, 18vw, 5rem);
+    right: calc(var(--button-size) * 0.72);
+  }
+
+  .trackPulse {
+    left: clamp(4.2rem, 28vw, 8rem);
+    right: calc(var(--button-size) * 0.56);
+  }
+
+  .orbOne {
+    right: calc(var(--button-size) * 0.88);
+  }
+
+  .orbTwo {
+    right: calc(var(--button-size) * 1.12);
+  }
+}
+
+@keyframes ringSpin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes shellSweep {
+  to {
+    rotate: -1turn;
+  }
+}
+
+@keyframes auraFieldDrift {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes shockBreath {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.82);
+  }
+
+  64% {
+    opacity: 0.28;
+    transform: scale(1.18);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+}
+
+@keyframes sparkOrbit {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes scanButton {
+  0%,
+  100% {
+    transform: translateX(-24%) rotate(8deg);
+  }
+
+  50% {
+    transform: translateX(24%) rotate(8deg);
+  }
+}
+
+@keyframes orbFloat {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -0.42rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquidButton,
+  .outline,
+  .prismTail,
+  .auraField,
+  .buttonHalo,
+  .shockRing,
+  .sparkBelt,
+  .energyRing,
+  .scanLine,
+  .trackPulse,
+  .energyOrb,
+  .shell::after,
+  .arrowIcon svg {
+    animation: none;
+    transition: none;
+  }
+}
