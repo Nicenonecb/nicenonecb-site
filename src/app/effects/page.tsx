@@ -10,6 +10,7 @@ import { ProceduralComputer } from "./procedural-computer/procedural-computer";
 import { QuantumNeuralNetwork } from "./quantum-neural-network/quantum-neural-network";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
+import { ChargingSparks } from "./charging-sparks/charging-sparks";
 import { EffectBackLink } from "./effect-back-link";
 import styles from "./effects-gallery.module.css";
 
@@ -103,6 +104,15 @@ const effects = [
       "参考 Muhannad Hassan 的 Liquid metal button：黑色胶囊轨道承载灰色图标与圆形金属按钮，hover/focus 时 WebGL 液态高光与同色系金属圆环一起被激活。",
     stack: ["WebGL2", "CSS masks", "Pointer easing", "Chrome hover ring", "Accessible button"],
     preview: <LiquidMetalButton variant="preview" />,
+  },
+  {
+    href: "/effects/charging-sparks",
+    index: "11",
+    name: "Charging Sparks",
+    summary:
+      "参考 Rémi SL 的 PopcornFX 火花 idle：黑灰雾化舞台里，一个高亮充能核心不断弹出圆片、胶囊、三角碎片、短线火花和偶发长斜向电弧。",
+    stack: ["React Three Fiber", "Three.js", "Additive blending", "Seeded timeline", "Realtime VFX"],
+    preview: <ChargingSparks variant="preview" />,
   },
 ];
 
