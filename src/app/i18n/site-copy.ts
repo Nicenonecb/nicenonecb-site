@@ -48,6 +48,11 @@ export const copy = {
           name: "Tearable UI",
           description: "A cloth-simulated canvas texture that stretches, tears, and reveals layers.",
         },
+        {
+          href: "/effects/reflective-signal-card",
+          name: "Reflective Signal",
+          description: "A React Bits-inspired card with pointer spotlight, metallic sheen, and 3D tilt.",
+        },
       ],
     },
     work: {
@@ -148,6 +153,11 @@ export const copy = {
           href: "/effects/tearable-ui",
           name: "Tearable UI",
           description: "把界面贴到布料网格上，拖拽后可拉伸、撕裂并露出下一层。",
+        },
+        {
+          href: "/effects/reflective-signal-card",
+          name: "Reflective Signal",
+          description: "受 React Bits 启发的交互卡片，指针聚光、金属反射和 3D 倾斜同源联动。",
         },
       ],
     },

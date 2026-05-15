@@ -6,7 +6,7 @@ import { ChargingSparks } from "./charging-sparks";
 export const metadata: Metadata = {
   title: "Charging Sparks Effect | Nicenonecb",
   description:
-    "A realtime PopcornFX-style charging sparks idle loop with simple glowing shapes, a pulsing shard core, and diagonal electric streaks.",
+    "A realtime PopcornFX-style charging core loop with a constantly moving white-hot energy ball, magenta/yellow/cyan pulses, and diagonal electric spears.",
 };
 
 export default function ChargingSparksEffectPage() {

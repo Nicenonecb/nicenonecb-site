@@ -116,6 +116,12 @@
   border: 0;
 }
 
+.previewFrame :global([data-effect="reflective-signal-card"]) {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
 .cardBody {
   display: grid;
   align-content: start;
@@ -257,6 +263,10 @@
   border: 0;
 }
 
+.detailStage :global([data-effect="reflective-signal-card"]) {
+  border: 0;
+}
+
 @media (max-width: 900px) {
   .card {
     min-height: 0;
@@ -270,6 +280,14 @@
 
   .grid {
     padding-top: 1rem;
+  }
+
+  .detailShell {
+    padding-top: 4.25rem;
+  }
+
+  .detailIntro h1 {
+    font-size: clamp(2.65rem, 15vw, 4.2rem);
   }
 
   .card {

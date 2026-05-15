@@ -8,6 +8,7 @@ import { LiquidMetalButton } from "./liquid-metal-button/liquid-metal-button";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
 import { QuantumNeuralNetwork } from "./quantum-neural-network/quantum-neural-network";
+import { ReflectiveSignalCard } from "./reflective-signal-card/reflective-signal-card";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
 import { ChargingSparks } from "./charging-sparks/charging-sparks";
@@ -110,9 +111,18 @@ const effects = [
     index: "11",
     name: "Charging Sparks",
     summary:
-      "参考 Rémi SL 的 PopcornFX 火花 idle：黑灰雾化舞台里，一个高亮充能核心不断弹出圆片、胶囊、三角碎片、短线火花和偶发长斜向电弧。",
-    stack: ["React Three Fiber", "Three.js", "Additive blending", "Seeded timeline", "Realtime VFX"],
+      "参考 damotime 视频的 PopcornFX idle：黑灰舞台中央的白热能量核持续搓动，按品红、黄绿、蓝青相位爆出胶囊粒子、弯曲光带和长斜向光刺。",
+    stack: ["Canvas 2D", "Energy field", "Additive glow", "Halftone haze", "Video study"],
     preview: <ChargingSparks variant="preview" />,
+  },
+  {
+    href: "/effects/reflective-signal-card",
+    index: "12",
+    name: "Reflective Signal",
+    summary:
+      "分析 React Bits 后抽取 spotlight、reflective sheen 和 tilt 的核心交互，改造成黑场荧光个人站风格的可点击特效卡片。",
+    stack: ["React Bits study", "Pointer CSS vars", "3D tilt", "Reflective sheen", "Focus states"],
+    preview: <ReflectiveSignalCard variant="preview" />,
   },
 ];
 
