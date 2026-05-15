@@ -12,7 +12,6 @@ import { ReflectiveSignalCard } from "./reflective-signal-card/reflective-signal
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
 import { ChargingSparks } from "./charging-sparks/charging-sparks";
-import { EffectBackLink } from "./effect-back-link";
 import { EffectsPager } from "./effects-pager";
 import styles from "./effects-gallery.module.css";
 
@@ -139,7 +138,9 @@ export default function EffectsPage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <EffectBackLink href="/" label="返回主页" />
+        <Link className={styles.galleryBack} href="/">
+          返回主页
+        </Link>
         <div className={styles.galleryIntro}>
           <h1>{effects.length} frontend effects</h1>
         </div>
