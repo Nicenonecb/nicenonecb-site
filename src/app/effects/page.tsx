@@ -8,10 +8,14 @@ import { LiquidMetalButton } from "./liquid-metal-button/liquid-metal-button";
 import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
 import { QuantumNeuralNetwork } from "./quantum-neural-network/quantum-neural-network";
+import { ReflectiveSignalCard } from "./reflective-signal-card/reflective-signal-card";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
-import { EffectBackLink } from "./effect-back-link";
+import { ChargingSparks } from "./charging-sparks/charging-sparks";
+import { EffectsPager } from "./effects-pager";
 import styles from "./effects-gallery.module.css";
+
+const effectsPageSize = 8;
 
 const effects = [
   {
@@ -104,6 +108,24 @@ const effects = [
     stack: ["WebGL2", "CSS masks", "Pointer easing", "Chrome hover ring", "Accessible button"],
     preview: <LiquidMetalButton variant="preview" />,
   },
+  {
+    href: "/effects/charging-sparks",
+    index: "11",
+    name: "Charging Sparks",
+    summary:
+      "参考 damotime 视频的 PopcornFX idle：黑灰舞台中央的白热能量核持续搓动，按品红、黄绿、蓝青相位爆出胶囊粒子、弯曲光带和长斜向光刺。",
+    stack: ["Canvas 2D", "Energy field", "Additive glow", "Halftone haze", "Video study"],
+    preview: <ChargingSparks variant="preview" />,
+  },
+  {
+    href: "/effects/reflective-signal-card",
+    index: "12",
+    name: "Reflective Signal",
+    summary:
+      "分析 React Bits 后抽取 spotlight、reflective sheen 和 tilt 的核心交互，改造成黑场荧光个人站风格的可点击特效卡片。",
+    stack: ["React Bits study", "Pointer CSS vars", "3D tilt", "Reflective sheen", "Focus states"],
+    preview: <ReflectiveSignalCard variant="preview" />,
+  },
 ];
 
 export const metadata: Metadata = {
@@ -116,10 +138,15 @@ export default function EffectsPage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <EffectBackLink href="/" label="返回主页" />
+        <Link className={styles.galleryBack} href="/">
+          返回主页
+        </Link>
+        <div className={styles.galleryIntro}>
+          <h1>{effects.length} frontend effects</h1>
+        </div>
       </header>
 
-      <section className={styles.grid} aria-label="Effects list">
+      <EffectsPager pageSize={effectsPageSize} total={effects.length}>
         {effects.map((effect) => (
           <article className={styles.card} key={effect.href}>
             <div className={styles.cardMeta}>
@@ -143,7 +170,7 @@ export default function EffectsPage() {
             </div>
           </article>
         ))}
-      </section>
+      </EffectsPager>
     </main>
   );
 }

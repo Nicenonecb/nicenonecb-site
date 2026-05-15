@@ -1,5 +1,6 @@
 .page {
   min-height: 100svh;
+  overflow-x: hidden;
   background:
     linear-gradient(90deg, rgb(255 255 255 / 0.055) 1px, transparent 1px),
     linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
@@ -9,8 +10,10 @@
 }
 
 .header,
-.grid {
+.grid,
+.pagination {
   width: min(96rem, calc(100% - 2.5rem));
+  max-width: calc(100% - 2.5rem);
   margin: 0 auto;
 }
 
@@ -21,11 +24,58 @@
 }
 
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  min-height: 4.1rem;
-  padding-top: 0.45rem;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  min-height: 4.6rem;
+  padding-top: 0.35rem;
   font-family: var(--font-geist-mono), monospace;
+}
+
+.galleryBack {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.45rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  padding: 0 0.92rem;
+  background: rgb(5 8 9 / 0.58);
+  color: rgb(216 255 240 / 0.82);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.galleryBack:hover,
+.galleryBack:focus-visible {
+  border-color: rgb(155 245 209 / 0.45);
+  background: rgb(155 245 209 / 0.12);
+  color: #effff9;
+  transform: translateX(-0.08rem);
+}
+
+.galleryIntro {
+  display: grid;
+  justify-items: start;
+  min-width: 0;
+  text-align: left;
+}
+
+.galleryIntro h1 {
+  color: #f8fafc;
+  font-size: clamp(1.35rem, 2vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .grid {
@@ -33,13 +83,14 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
   gap: clamp(1rem, 1.8vw, 1.4rem);
   align-items: stretch;
-  padding: 0.85rem 0 max(4rem, env(safe-area-inset-bottom));
+  padding: 0.85rem 0 1.15rem;
 }
 
 .card {
   display: grid;
   grid-template-rows: auto auto 1fr;
   height: 100%;
+  min-width: 0;
   min-height: 0;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 0.12);
@@ -67,6 +118,7 @@
 
 .previewFrame {
   aspect-ratio: 16 / 10;
+  min-width: 0;
   overflow: hidden;
   background: #050607;
 }
@@ -110,11 +162,24 @@
   border: 0;
 }
 
+.previewFrame :global([data-effect="charging-sparks"]) {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
+.previewFrame :global([data-effect="reflective-signal-card"]) {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
 .cardBody {
   display: grid;
   align-content: start;
   grid-template-rows: auto auto auto 1fr;
   gap: 1rem;
+  min-width: 0;
   padding: 1.3rem;
   border-top: 1px solid rgb(255 255 255 / 0.1);
 }
@@ -124,6 +189,7 @@
   font-size: clamp(1.45rem, 2.8vw, 2rem);
   font-weight: 700;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
 }
 
 .cardBody p {
@@ -131,12 +197,14 @@
   color: rgb(244 244 245 / 0.66);
   font-size: 0.95rem;
   line-height: 1.75;
+  overflow-wrap: anywhere;
 }
 
 .stackList {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  min-width: 0;
 }
 
 .stackList span {
@@ -165,6 +233,64 @@
     background 160ms ease,
     color 160ms ease,
     border-color 160ms ease;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0 max(4rem, env(safe-area-inset-bottom));
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.pagination p {
+  color: rgb(244 244 245 / 0.54);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.pageControls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
+.pageControls button {
+  min-height: 2.65rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  padding: 0 0.9rem;
+  background: rgb(9 10 12 / 0.74);
+  color: rgb(244 244 245 / 0.62);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.pageControls button:hover:not(:disabled),
+.pageControls button:focus-visible {
+  border-color: rgb(155 245 209 / 0.68);
+  color: #9bf5d1;
+}
+
+.pageControls button[aria-current="page"] {
+  border-color: #9bf5d1;
+  background: #9bf5d1;
+  color: #05100c;
+}
+
+.pageControls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.36;
 }
 
 .openLink:hover {
@@ -247,7 +373,19 @@
   border: 0;
 }
 
+.detailStage :global([data-effect="charging-sparks"]) {
+  border: 0;
+}
+
+.detailStage :global([data-effect="reflective-signal-card"]) {
+  border: 0;
+}
+
 @media (max-width: 900px) {
+  .galleryIntro {
+    max-width: 25rem;
+  }
+
   .card {
     min-height: 0;
   }
@@ -255,11 +393,54 @@
 
 @media (max-width: 640px) {
   .header {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
     padding: 0.9rem 0 0.2rem;
   }
 
+  .galleryIntro {
+    justify-items: start;
+    justify-self: start;
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .galleryIntro h1 {
+    max-width: 11.5rem;
+    font-size: clamp(1.55rem, 8vw, 1.95rem);
+    line-height: 1.08;
+  }
+
+  .cardMeta span:last-child {
+    display: none;
+  }
+
   .grid {
+    grid-template-columns: 1fr;
     padding-top: 1rem;
+  }
+
+  .pagination {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .pageControls {
+    justify-content: flex-start;
+  }
+
+  .pageControls button {
+    min-height: 2.55rem;
+    padding: 0 0.78rem;
+    font-size: 0.62rem;
+  }
+
+  .detailShell {
+    padding-top: 4.25rem;
+  }
+
+  .detailIntro h1 {
+    font-size: clamp(2.65rem, 15vw, 4.2rem);
   }
 
   .card {

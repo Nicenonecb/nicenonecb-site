@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GlassPage } from "./effects/glass-page/glass-page";
 import { LiquidLayersDraw } from "./effects/liquid-layers-draw/liquid-layers-draw";
+import { ReflectiveSignalCard } from "./effects/reflective-signal-card/reflective-signal-card";
 import { TearableUi } from "./effects/tearable-ui/tearable-ui";
 import { LanguageSwitch } from "./i18n/language-switch";
 import { copy, navItems, type Lang } from "./i18n/site-copy";
@@ -31,6 +32,8 @@ function EffectPreview({ href }: { href: string }) {
       return <LiquidLayersDraw variant="preview" />;
     case "/effects/tearable-ui":
       return <TearableUi variant="preview" />;
+    case "/effects/reflective-signal-card":
+      return <ReflectiveSignalCard variant="preview" />;
     case "/effects/glass-page":
     default:
       return <GlassPage variant="preview" />;
