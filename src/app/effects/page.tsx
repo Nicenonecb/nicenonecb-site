@@ -13,7 +13,10 @@ import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
 import { ChargingSparks } from "./charging-sparks/charging-sparks";
 import { EffectBackLink } from "./effect-back-link";
+import { EffectsPager } from "./effects-pager";
 import styles from "./effects-gallery.module.css";
+
+const effectsPageSize = 8;
 
 const effects = [
   {
@@ -137,9 +140,12 @@ export default function EffectsPage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <EffectBackLink href="/" label="返回主页" />
+        <div className={styles.galleryIntro}>
+          <h1>{effects.length} frontend effects</h1>
+        </div>
       </header>
 
-      <section className={styles.grid} aria-label="Effects list">
+      <EffectsPager pageSize={effectsPageSize} total={effects.length}>
         {effects.map((effect) => (
           <article className={styles.card} key={effect.href}>
             <div className={styles.cardMeta}>
@@ -163,7 +169,7 @@ export default function EffectsPage() {
             </div>
           </article>
         ))}
-      </section>
+      </EffectsPager>
     </main>
   );
 }
