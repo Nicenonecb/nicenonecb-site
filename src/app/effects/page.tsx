@@ -12,6 +12,7 @@ import { ReflectiveSignalCard } from "./reflective-signal-card/reflective-signal
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
 import { ChargingSparks } from "./charging-sparks/charging-sparks";
+import { ThreeHtmlCanvas } from "./three-html-canvas/three-html-canvas";
 import { EffectsPager } from "./effects-pager";
 import styles from "./effects-gallery.module.css";
 
@@ -125,6 +126,15 @@ const effects = [
       "分析 React Bits 后抽取 spotlight、reflective sheen 和 tilt 的核心交互，改造成黑场荧光个人站风格的可点击特效卡片。",
     stack: ["React Bits study", "Pointer CSS vars", "3D tilt", "Reflective sheen", "Focus states"],
     preview: <ReflectiveSignalCard variant="preview" />,
+  },
+  {
+    href: "/effects/three-html-canvas",
+    index: "13",
+    name: "Three HTML Canvas",
+    summary:
+      "参考 Cullen Webber 的 three-html-to-canvas：白底巨型 HTML 海报被绘成 canvas 纹理，滚动后在 Three.js 中变成红白黑的拱门、柱体、球体和透视文字舞台。",
+    stack: ["Three.js", "CanvasTexture", "Scroll timeline", "3D typography planes", "Sticky WebGL"],
+    preview: <ThreeHtmlCanvas variant="preview" />,
   },
 ];
 

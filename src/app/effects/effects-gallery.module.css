@@ -174,6 +174,12 @@
   border: 0;
 }
 
+.previewFrame :global([data-effect="three-html-canvas"]) {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
 .cardBody {
   display: grid;
   align-content: start;
@@ -378,6 +384,10 @@
 }
 
 .detailStage :global([data-effect="reflective-signal-card"]) {
+  border: 0;
+}
+
+.detailStage :global([data-effect="three-html-canvas"]) {
   border: 0;
 }
 
