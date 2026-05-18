@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import styles from "./three-html-canvas.module.css";
@@ -8,167 +9,300 @@ type ThreeHtmlCanvasProps = {
   variant?: "detail" | "preview";
 };
 
+type Projector = {
+  applyTo: (mesh: THREE.Mesh) => void;
+  camera: THREE.PerspectiveCamera;
+  dispose: () => void;
+  uniforms: {
+    projectedTexture: { value: THREE.Texture };
+    projectorPosition: { value: THREE.Vector3 };
+    projectorProjectionMatrix: { value: THREE.Matrix4 };
+    projectorViewMatrix: { value: THREE.Matrix4 };
+    uLitness: { value: number };
+  };
+  update: () => void;
+};
+
 type Runtime = {
   animationFrame: number;
   camera: THREE.PerspectiveCamera;
-  flatMaterial: THREE.MeshBasicMaterial;
-  flatPlane: THREE.Mesh;
-  group3d: THREE.Group;
-  posterTexture: THREE.CanvasTexture;
+  htmlCapture: HtmlToCanvas;
+  projector: Projector;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   smoothProgress: number;
   targetProgress: number;
-  viewDistance: number;
 };
 
-const posterSize = { height: 900, width: 1600 };
-const cardRed = "#ff4038";
-const ink = "#1d1d1f";
+type Keyframe = {
+  roll: number;
+  x: number;
+  y: number;
+  z: number;
+};
+
+const cameraFov = 45;
+const restPosition = new THREE.Vector3(0, 0, 15);
+const lookTarget = new THREE.Vector3(0, -1, -4);
+const keyframes: Keyframe[] = [
+  { roll: 0, x: 0, y: 0, z: 0 },
+  { roll: 0.22, x: 20, y: -2, z: -10 },
+  { roll: -0.22, x: -15, y: 10, z: -5 },
+  { roll: 0, x: 0, y: 0, z: 0 },
+];
+
+const sourceShellStyle: CSSProperties = {
+  alignItems: "center",
+  background: "#ffffff",
+  color: "#222222",
+  display: "flex",
+  fontFamily: "Arial, Helvetica, sans-serif",
+  height: "100%",
+  justifyContent: "center",
+  overflow: "hidden",
+  padding: "0 16px",
+  position: "relative",
+  width: "100%",
+};
+
+const headingStyle: CSSProperties = {
+  fontSize: "clamp(3rem, 7.5vw, 6rem)",
+  fontWeight: 900,
+  letterSpacing: "-0.055em",
+  lineHeight: 0.86,
+  margin: 0,
+};
 
 function clamp(value: number, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
 
-function lerp(from: number, to: number, amount: number) {
+function mix(from: number, to: number, amount: number) {
   return from + (to - from) * amount;
 }
 
-function smoothstep(edge0: number, edge1: number, value: number) {
-  const t = clamp((value - edge0) / (edge1 - edge0));
-
-  return t * t * (3 - 2 * t);
+function smoothstep(value: number) {
+  return value * value * (3 - 2 * value);
 }
 
-function pulse(edge0: number, edge1: number, edge2: number, edge3: number, value: number) {
-  return smoothstep(edge0, edge1, value) * (1 - smoothstep(edge2, edge3, value));
+function keyframeValue(progress: number) {
+  const segments = keyframes.length - 1;
+  const scaled = clamp(progress) * segments;
+  const index = Math.min(Math.floor(scaled), segments - 1);
+  const local = smoothstep(scaled - index);
+  const from = keyframes[index];
+  const to = keyframes[index + 1];
+
+  return {
+    roll: mix(from.roll, to.roll, local),
+    x: mix(from.x, to.x, local),
+    y: mix(from.y, to.y, local),
+    z: mix(from.z, to.z, local),
+  };
 }
 
-function drawHeading(context: CanvasRenderingContext2D, text: string, x: number, y: number, align: CanvasTextAlign) {
-  context.save();
-  context.fillStyle = ink;
-  context.font = "900 132px Arial, Helvetica, sans-serif";
-  context.textAlign = align;
-  context.textBaseline = "top";
-  context.fillText(text, x, y);
-  context.restore();
-}
+class HtmlToCanvas {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  element: HTMLElement;
+  extraCss = "";
+  height: number;
+  pixelRatio: number;
+  texture: THREE.CanvasTexture;
+  width: number;
 
-function drawCardText(context: CanvasRenderingContext2D, x: number, y: number, width: number) {
-  context.save();
-  context.fillStyle = ink;
-  context.textAlign = "left";
-  context.textBaseline = "top";
-  context.font = "900 44px Arial, Helvetica, sans-serif";
-  context.fillText("Cullen Webber", x, y);
-  context.font = "900 16px Arial, Helvetica, sans-serif";
-  context.fillText("TM", x + 338, y + 2);
-  context.font = "800 24px Arial, Helvetica, sans-serif";
-  const boldLines = ["Lorem ipsum dolor sit amet,", "consectetur adipiscing elit, sed", "do eiusmod tempor incididunt ut", "labore et dolore magna aliqua."];
+  private current: Promise<void> | null = null;
+  private pending = false;
+  private rendering = false;
 
-  boldLines.forEach((line, index) => {
-    context.fillText(line, x, y + 88 + index * 32);
-  });
+  constructor(element: HTMLElement, { height, pixelRatio = 2, width }: { height: number; pixelRatio?: number; width: number }) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-  context.font = "500 21px Arial, Helvetica, sans-serif";
-  const bodyLines = ["Lorem ipsum dolor sit amet, consectetur", "adipiscing elit, sed do eiusmod tempor."];
+    if (!ctx) {
+      throw new Error("Unable to create 2D canvas context");
+    }
 
-  bodyLines.forEach((line, index) => {
-    context.fillText(line, x, y + 270 + index * 28);
-  });
-
-  context.strokeStyle = ink;
-  context.lineWidth = 2;
-  context.beginPath();
-  context.moveTo(x, y + 20);
-  context.lineTo(x - 8, y + 20);
-  context.stroke();
-  context.fillRect(x - 11, y + 108, 2, 2);
-  context.fillRect(x + width - 12, y + 106, 2, 2);
-  context.fillRect(x - 10, y + 330, 2, 2);
-  context.restore();
-}
-
-function createPosterCanvas() {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  canvas.width = posterSize.width;
-  canvas.height = posterSize.height;
-
-  if (!context) {
-    return canvas;
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.element = element;
+    this.height = height;
+    this.pixelRatio = pixelRatio;
+    this.width = width;
+    this.texture = new THREE.CanvasTexture(canvas);
+    this.texture.colorSpace = THREE.SRGBColorSpace;
+    this.texture.generateMipmaps = false;
+    this.texture.magFilter = THREE.LinearFilter;
+    this.texture.minFilter = THREE.LinearFilter;
   }
 
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  drawHeading(context, "Designing", 800, -72, "center");
-  drawHeading(context, "Motion", 1015, 70, "center");
-  drawHeading(context, "Crafting", 540, 245, "right");
-  drawHeading(context, "Depth", 600, 390, "right");
-  drawHeading(context, "Into", 1130, 520, "left");
-  drawHeading(context, "Living", 1225, 665, "left");
-  drawHeading(context, "Worlds", 1035, 810, "left");
-
-  context.fillStyle = cardRed;
-  context.fillRect(550, 140, 500, 500);
-  drawCardText(context, 590, 180, 420);
-
-  context.fillStyle = "#111111";
-  context.font = "900 22px Arial, Helvetica, sans-serif";
-  context.textAlign = "center";
-  context.fillText("SCROLL DOWN", 800, 724);
-
-  return canvas;
-}
-
-function createCardCanvas() {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  canvas.width = 900;
-  canvas.height = 900;
-
-  if (!context) {
-    return canvas;
+  resize(width: number, height: number) {
+    this.width = width;
+    this.height = height;
   }
 
-  context.fillStyle = cardRed;
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  drawCardText(context, 74, 90, 720);
+  async update() {
+    if (this.rendering) {
+      this.pending = true;
+      return this.current;
+    }
 
-  return canvas;
-}
+    this.rendering = true;
+    this.current = this.renderLoop();
 
-function createTextCanvas(text: string, width: number, height: number, size: number) {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  canvas.width = width;
-  canvas.height = height;
-
-  if (!context) {
-    return canvas;
+    return this.current;
   }
 
-  context.clearRect(0, 0, width, height);
-  context.fillStyle = ink;
-  context.font = `900 ${size}px Arial, Helvetica, sans-serif`;
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-  context.fillText(text, width / 2, height / 2);
+  dispose() {
+    this.texture.dispose();
+  }
 
-  return canvas;
+  private async renderLoop() {
+    try {
+      do {
+        this.pending = false;
+        const width = Math.max(1, Math.floor(this.width * this.pixelRatio));
+        const height = Math.max(1, Math.floor(this.height * this.pixelRatio));
+
+        if (this.canvas.width !== width || this.canvas.height !== height) {
+          this.canvas.width = width;
+          this.canvas.height = height;
+          this.texture.dispose();
+        }
+
+        const image = new Image();
+
+        image.src = this.buildSvgDataUrl();
+        await image.decode();
+        this.ctx.clearRect(0, 0, width, height);
+        this.ctx.drawImage(image, 0, 0, width, height);
+        this.texture.needsUpdate = true;
+      } while (this.pending);
+    } finally {
+      this.rendering = false;
+      this.current = null;
+    }
+  }
+
+  private buildSvgDataUrl() {
+    const serialized = new XMLSerializer().serializeToString(this.element);
+    const css = `
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      .three-html-capture-root { width: ${this.width}px; height: ${this.height}px; }
+      ${this.extraCss}
+    `;
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${this.width}" height="${this.height}">
+        <foreignObject width="100%" height="100%">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="three-html-capture-root">
+            <style>${css}</style>
+            ${serialized}
+          </div>
+        </foreignObject>
+      </svg>
+    `;
+
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  }
 }
 
-function createTexture(canvas: HTMLCanvasElement) {
-  const texture = new THREE.CanvasTexture(canvas);
+function createProjector({ camera, texture }: { camera: THREE.PerspectiveCamera; texture: THREE.Texture }): Projector {
+  const materials = new Set<THREE.Material>();
+  const uniforms = {
+    projectedTexture: { value: texture },
+    projectorPosition: { value: new THREE.Vector3() },
+    projectorProjectionMatrix: { value: new THREE.Matrix4() },
+    projectorViewMatrix: { value: new THREE.Matrix4() },
+    uLitness: { value: 0 },
+  };
 
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 8;
-  texture.needsUpdate = true;
+  const applyTo = (mesh: THREE.Mesh) => {
+    const material = mesh.material;
 
-  return texture;
+    if (!material || Array.isArray(material)) {
+      return;
+    }
+
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.projectedTexture = uniforms.projectedTexture;
+      shader.uniforms.projectorPosition = uniforms.projectorPosition;
+      shader.uniforms.projectorProjectionMatrix = uniforms.projectorProjectionMatrix;
+      shader.uniforms.projectorViewMatrix = uniforms.projectorViewMatrix;
+      shader.uniforms.uLitness = uniforms.uLitness;
+
+      shader.vertexShader = shader.vertexShader
+        .replace(
+          "#include <common>",
+          `#include <common>
+          uniform mat4 projectorViewMatrix;
+          uniform mat4 projectorProjectionMatrix;
+          uniform vec3 projectorPosition;
+          varying vec4 vProjectedCoord;
+          varying vec3 vProjectorDir;
+          varying vec3 vProjectorNormal;`,
+        )
+        .replace(
+          "#include <begin_vertex>",
+          `#include <begin_vertex>
+          vec4 projectionWorldPosition = modelMatrix * vec4(transformed, 1.0);
+          vProjectedCoord = projectorProjectionMatrix * projectorViewMatrix * projectionWorldPosition;
+          vProjectorDir = normalize(projectorPosition - projectionWorldPosition.xyz);
+          vProjectorNormal = normalize(mat3(modelMatrix) * normal);`,
+        );
+
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          "#include <common>",
+          `#include <common>
+          uniform sampler2D projectedTexture;
+          uniform float uLitness;
+          varying vec4 vProjectedCoord;
+          varying vec3 vProjectorDir;
+          varying vec3 vProjectorNormal;`,
+        )
+        .replace(
+          "#include <color_fragment>",
+          `#include <color_fragment>
+          vec3 projectedNdc = vProjectedCoord.xyz / vProjectedCoord.w;
+          vec2 projectedUv = projectedNdc.xy * 0.5 + 0.5;
+          float inFrustum = step(0.0, projectedUv.x) * step(projectedUv.x, 1.0)
+            * step(0.0, projectedUv.y) * step(projectedUv.y, 1.0)
+            * step(-1.0, projectedNdc.z) * step(projectedNdc.z, 1.0);
+          float facingProjector = step(0.0, dot(vProjectorNormal, vProjectorDir));
+          vec4 projectedColor = texture2D(projectedTexture, projectedUv);
+          float projectionMask = inFrustum * facingProjector * projectedColor.a;
+          diffuseColor.rgb = mix(diffuseColor.rgb, projectedColor.rgb, projectionMask);
+          vec3 flatProjectedDiffuse = diffuseColor.rgb;`,
+        )
+        .replace(
+          "#include <opaque_fragment>",
+          `#include <opaque_fragment>
+          gl_FragColor.rgb = mix(flatProjectedDiffuse, gl_FragColor.rgb, uLitness);`,
+        );
+    };
+
+    material.needsUpdate = true;
+    materials.add(material);
+  };
+
+  const update = () => {
+    camera.updateMatrixWorld();
+    uniforms.projectorPosition.value.setFromMatrixPosition(camera.matrixWorld);
+    uniforms.projectorProjectionMatrix.value.copy(camera.projectionMatrix);
+    uniforms.projectorViewMatrix.value.copy(camera.matrixWorldInverse);
+  };
+
+  const dispose = () => {
+    materials.forEach((material) => {
+      material.onBeforeCompile = () => undefined;
+      material.dispose();
+    });
+  };
+
+  update();
+
+  return { applyTo, camera, dispose, uniforms, update };
 }
 
 function createRoundedShape(width: number, height: number, radius: number) {
@@ -191,268 +325,237 @@ function createRoundedShape(width: number, height: number, radius: number) {
 
 function createArch(material: THREE.Material) {
   const group = new THREE.Group();
-  const torus = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.072, 24, 72, Math.PI), material);
+  const arch = new THREE.Mesh(new THREE.TorusGeometry(0.82, 0.09, 24, 72, Math.PI), material);
 
-  torus.position.y = 0.08;
-  group.add(torus);
+  arch.position.y = 0.3;
+  group.add(arch);
 
-  for (const x of [-0.62, 0.62]) {
-    const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.074, 0.074, 1.15, 24), material);
+  for (const x of [-0.82, 0.82]) {
+    const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.45, 28), material);
 
-    pillar.position.set(x, -0.52, 0);
+    pillar.position.set(x, -0.42, 0);
     group.add(pillar);
   }
 
   return group;
 }
 
-function createTextPlane(text: string, width: number, height: number, fontSize: number) {
-  const texture = createTexture(createTextCanvas(text, 1200, 280, fontSize));
-  const material = new THREE.MeshBasicMaterial({
-    map: texture,
-    transparent: true,
-  });
-  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), material);
-
-  mesh.userData.texture = texture;
-
-  return mesh;
-}
-
-function createScene() {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-
-  camera.position.set(0, 0, 8);
-  scene.background = new THREE.Color("#ffffff");
-  scene.add(new THREE.AmbientLight(0xffffff, 1.35));
-
-  const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
-
-  keyLight.position.set(2.6, 4.2, 5.5);
-  scene.add(keyLight);
-
-  const posterTexture = createTexture(createPosterCanvas());
-  const flatMaterial = new THREE.MeshBasicMaterial({ map: posterTexture, transparent: true });
-  const flatPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), flatMaterial);
-
-  scene.add(flatPlane);
-
-  const group3d = createDepthGroup();
-
-  group3d.visible = false;
-  scene.add(group3d);
-
-  return { camera, flatMaterial, flatPlane, group3d, posterTexture, scene };
-}
-
-function createDepthGroup() {
+function createProjectedStage(material: THREE.MeshStandardMaterial) {
   const group = new THREE.Group();
-  const red = new THREE.MeshStandardMaterial({ color: cardRed, roughness: 0.46, metalness: 0.03 });
-  const redDark = new THREE.MeshStandardMaterial({ color: "#d92e27", roughness: 0.55, metalness: 0.02 });
-  const white = new THREE.MeshStandardMaterial({ color: "#f8f8f4", roughness: 0.38, metalness: 0.08 });
-  const cardTexture = createTexture(createCardCanvas());
-  const cardMaterial = new THREE.MeshBasicMaterial({ map: cardTexture, side: THREE.DoubleSide });
-  const rounded = createRoundedShape(2.75, 2.75, 0.24);
+  const background = new THREE.Mesh(new THREE.PlaneGeometry(38, 19), material);
 
-  for (let index = 0; index < 3; index += 1) {
-    const slab = new THREE.Mesh(new THREE.ShapeGeometry(rounded), index === 0 ? cardMaterial : red);
+  background.position.set(0, -1, -4);
+  background.receiveShadow = true;
+  group.add(background);
 
-    slab.position.set(0.98 - index * 0.92, 0.03 - index * 0.08, 0.42 - index * 0.72);
-    slab.rotation.set(-0.08 + index * 0.02, -0.24 + index * 0.16, 0.04 - index * 0.08);
-    slab.scale.setScalar(1 - index * 0.08);
-    group.add(slab);
-  }
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 16), material);
 
-  const floorText = createTextPlane("Crafting Depth", 6.6, 1.55, 170);
+  floor.position.set(0, -4.72, -1.8);
+  floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = true;
+  group.add(floor);
 
-  floorText.position.set(-0.9, -1.5, 1.05);
-  floorText.rotation.set(-Math.PI / 2.18, 0, -0.16);
-  group.add(floorText);
+  const rounded = createRoundedShape(4.9, 4.1, 0.36);
+  const heroCard = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(rounded, { bevelEnabled: false, depth: 0.22, steps: 1 }),
+    material,
+  );
 
-  const rearText = createTextPlane("Designing Motion", 6.2, 1.45, 150);
+  heroCard.position.set(2.35, -1.2, -1.2);
+  heroCard.rotation.set(-0.05, -0.2, 0.05);
+  heroCard.castShadow = true;
+  heroCard.receiveShadow = true;
+  group.add(heroCard);
 
-  rearText.position.set(0.38, 1.42, -1.9);
-  rearText.rotation.set(0.16, 0.08, -0.08);
-  group.add(rearText);
+  for (let index = 0; index < 4; index += 1) {
+    const step = new THREE.Mesh(new THREE.BoxGeometry(2.35 - index * 0.18, 0.16, 0.42), material);
 
-  for (let index = 0; index < 5; index += 1) {
-    const step = new THREE.Mesh(new THREE.BoxGeometry(1.6 - index * 0.11, 0.09, 0.24), index % 2 === 0 ? red : redDark);
-
-    step.position.set(-0.82 + index * 0.13, -0.92 + index * 0.1, 0.7 - index * 0.18);
+    step.position.set(-1.25 + index * 0.18, -2.15 + index * 0.16, -0.6 - index * 0.2);
     step.rotation.y = -0.16;
+    step.castShadow = true;
+    step.receiveShadow = true;
     group.add(step);
   }
 
-  const archBack = createArch(white);
+  const archBack = createArch(material);
 
-  archBack.position.set(-0.92, -0.12, 0.48);
-  archBack.rotation.set(0.05, -0.22, 0);
-  archBack.scale.set(1.13, 1.13, 1.13);
+  archBack.position.set(-1.55, -1.22, -0.46);
+  archBack.rotation.y = -0.2;
+  archBack.scale.setScalar(1.25);
   group.add(archBack);
 
-  const archFront = createArch(red);
+  const archFront = createArch(material);
 
-  archFront.position.set(-1.04, -0.2, 0.74);
-  archFront.rotation.set(0.05, -0.22, 0);
-  archFront.scale.set(0.82, 0.82, 0.82);
+  archFront.position.set(-1.75, -1.48, 0.08);
+  archFront.rotation.y = -0.22;
+  archFront.scale.setScalar(0.94);
   group.add(archFront);
 
   for (const item of [
-    { color: red, height: 1.34, x: -1.72, z: 0.9 },
-    { color: white, height: 1.72, x: 0.02, z: 0.55 },
-    { color: red, height: 1.5, x: 0.2, z: 0.72 },
+    { height: 2.55, radius: 0.16, x: -3.25, y: -1.63, z: 0.2 },
+    { height: 2.65, radius: 0.16, x: -0.08, y: -1.35, z: -0.14 },
+    { height: 2.3, radius: 0.16, x: 0.3, y: -1.48, z: 0.42 },
   ]) {
-    const column = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, item.height, 32), item.color);
+    const column = new THREE.Mesh(new THREE.CylinderGeometry(item.radius, item.radius, item.height, 36), material);
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(item.radius * 1.45, 36, 18), material);
 
-    column.position.set(item.x, -0.23, item.z);
-    column.rotation.z = -0.05;
-    group.add(column);
-
-    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.18, 32, 18), item.color);
-
-    cap.position.set(item.x - 0.02, -0.23 + item.height / 2 + 0.08, item.z);
-    group.add(cap);
+    column.position.set(item.x, item.y, item.z);
+    column.castShadow = true;
+    column.receiveShadow = true;
+    cap.position.set(item.x, item.y + item.height / 2 + item.radius, item.z);
+    cap.castShadow = true;
+    cap.receiveShadow = true;
+    group.add(column, cap);
   }
 
   for (const item of [
-    { radius: 0.38, x: -0.23, y: -0.92, z: 1.28 },
-    { radius: 0.22, x: -1.96, y: -0.74, z: 1.28 },
-    { radius: 0.16, x: -1.35, y: -0.46, z: 1.08 },
+    { radius: 0.62, x: -0.95, y: -2.64, z: 0.62 },
+    { radius: 0.34, x: -3.12, y: -2.32, z: 0.7 },
+    { radius: 0.24, x: -2.45, y: -1.8, z: 0.64 },
   ]) {
-    const sphere = new THREE.Mesh(new THREE.SphereGeometry(item.radius, 48, 24), white);
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(item.radius, 48, 24), material);
 
     sphere.position.set(item.x, item.y, item.z);
+    sphere.castShadow = true;
+    sphere.receiveShadow = true;
     group.add(sphere);
   }
 
-  const cMark = createTextPlane("C", 0.42, 0.42, 220);
-
-  cMark.position.set(-0.23, -0.91, 1.67);
-  cMark.rotation.set(0.02, -0.08, -0.16);
-  group.add(cMark);
-
-  group.scale.setScalar(0.72);
+  group.traverse((object) => {
+    if ((object as THREE.Mesh).isMesh) {
+      (object as THREE.Mesh).castShadow = true;
+      (object as THREE.Mesh).receiveShadow = true;
+    }
+  });
+  group.scale.setScalar(1.16);
+  group.position.set(-0.18, 0.05, 0.25);
 
   return group;
 }
 
-function fitFlatPlane(runtime: Runtime, width: number, height: number) {
-  const aspect = width / Math.max(1, height);
-  const posterAspect = posterSize.width / posterSize.height;
-  const viewHeight = 2 * Math.tan(THREE.MathUtils.degToRad(runtime.camera.fov) / 2) * runtime.viewDistance;
-  const viewWidth = viewHeight * aspect;
+function createScene(texture: THREE.Texture, width: number, height: number) {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(cameraFov, width / height, 1, 100);
+  const projectorCamera = new THREE.PerspectiveCamera(cameraFov, width / height, 1, 100);
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.42, metalness: 0.02 });
+  const projector = createProjector({ camera: projectorCamera, texture });
+  const stage = createProjectedStage(material);
+  const ambient = new THREE.AmbientLight(0xffffff, 1);
+  const key = new THREE.DirectionalLight(0xffffff, 2.6);
 
-  if (aspect > posterAspect) {
-    runtime.flatPlane.scale.set(viewWidth * 1.02, (viewWidth / posterAspect) * 1.02, 1);
-  } else {
-    runtime.flatPlane.scale.set(viewHeight * posterAspect * 1.02, viewHeight * 1.02, 1);
-  }
+  scene.background = new THREE.Color(0xffffff);
+  camera.position.copy(restPosition);
+  camera.lookAt(lookTarget);
+  projectorCamera.position.copy(restPosition);
+  projectorCamera.lookAt(lookTarget);
+  projectorCamera.updateMatrixWorld();
+  key.position.set(5, 8, 6);
+  key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.camera.near = 0.5;
+  key.shadow.camera.far = 50;
+  key.shadow.camera.left = -15;
+  key.shadow.camera.right = 15;
+  key.shadow.camera.top = 15;
+  key.shadow.camera.bottom = -15;
+  key.shadow.bias = -0.0001;
+  key.shadow.normalBias = 0.02;
 
-  runtime.camera.aspect = aspect;
-  runtime.camera.updateProjectionMatrix();
-}
-
-function setGroupOpacity(group: THREE.Group, opacity: number) {
-  group.traverse((object) => {
-    const mesh = object as THREE.Mesh;
-
-    if (!mesh.material) {
-      return;
+  stage.traverse((object) => {
+    if ((object as THREE.Mesh).isMesh) {
+      projector.applyTo(object as THREE.Mesh);
     }
-
-    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-
-    materials.forEach((material) => {
-      material.transparent = true;
-      material.opacity = opacity;
-    });
   });
+
+  scene.add(ambient, key, stage);
+  projector.update();
+
+  return { camera, projector, scene };
 }
 
-function updateScene(runtime: Runtime, progress: number, variant: "detail" | "preview") {
-  const depth = variant === "preview" ? 0.92 : pulse(0.08, 0.34, 0.76, 0.98, progress);
-  const settle = smoothstep(0.18, 0.62, progress);
-  const returnPhase = smoothstep(0.78, 1, progress);
-  const orbit = progress * Math.PI * 2;
-
-  runtime.group3d.visible = depth > 0.01;
-  runtime.flatMaterial.opacity = 1 - depth * 0.92;
-  setGroupOpacity(runtime.group3d, clamp(depth * 1.16));
+function updateCamera(runtime: Runtime, progress: number) {
+  const keyframe = keyframeValue(progress);
 
   runtime.camera.position.set(
-    lerp(0, -0.72, depth) + Math.sin(orbit) * 0.06 * depth,
-    lerp(0, 0.1, depth),
-    lerp(runtime.viewDistance, 5.95, depth) + returnPhase * 2.8,
+    restPosition.x + keyframe.x,
+    restPosition.y + keyframe.y,
+    restPosition.z + keyframe.z,
   );
-  runtime.camera.rotation.set(0, lerp(0, -0.08, depth), lerp(0, -0.02, depth));
-  runtime.camera.lookAt(lerp(0, 0.03, depth), lerp(0, -0.1, depth), lerp(0, 0.2, depth));
+  runtime.camera.lookAt(lookTarget);
+  runtime.camera.rotateZ(keyframe.roll);
 
-  runtime.group3d.position.set(lerp(-0.18, -0.04, settle), lerp(-0.04, 0.02, settle), lerp(-0.2, 0.1, settle));
-  runtime.group3d.rotation.set(
-    lerp(0, -0.24, depth) + returnPhase * 0.16,
-    lerp(0, -0.36, depth) + Math.sin(orbit * 0.7) * 0.05 * depth,
-    lerp(0, 0.08, depth),
-  );
-  runtime.group3d.scale.setScalar(lerp(0.95, 1.08, depth));
+  // 参考实现会在离开首屏视角时逐步恢复 Three.js 光照，让平面投影变成真实 3D 物体。
+  const distanceFromRest = Math.min(progress, 1 - progress) * 2;
+  runtime.projector.uniforms.uLitness.value = smoothstep(clamp(distanceFromRest));
+}
+
+function resizeRuntime(runtime: Runtime, canvas: HTMLCanvasElement, width: number, height: number) {
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+  runtime.renderer.setPixelRatio(pixelRatio);
+  runtime.renderer.setSize(width, height, false);
+  runtime.camera.aspect = width / Math.max(1, height);
+  runtime.camera.updateProjectionMatrix();
+  runtime.projector.camera.aspect = runtime.camera.aspect;
+  runtime.projector.camera.updateProjectionMatrix();
+  runtime.projector.update();
+  runtime.htmlCapture.pixelRatio = pixelRatio;
+  runtime.htmlCapture.resize(width, height);
+  void runtime.htmlCapture.update();
+  canvas.style.width = "100%";
+  canvas.style.height = "100%";
 }
 
 function disposeRuntime(runtime: Runtime) {
   cancelAnimationFrame(runtime.animationFrame);
+  runtime.projector.dispose();
+  runtime.htmlCapture.dispose();
   runtime.scene.traverse((object) => {
     const mesh = object as THREE.Mesh;
 
     mesh.geometry?.dispose();
-
-    if (mesh.material) {
-      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-
-      materials.forEach((material) => {
-        const withMap = material as THREE.Material & { map?: THREE.Texture };
-
-        withMap.map?.dispose();
-        material.dispose();
-      });
-    }
-
-    (mesh.userData.texture as THREE.Texture | undefined)?.dispose();
   });
-  runtime.posterTexture.dispose();
   runtime.renderer.dispose();
 }
 
 export function ThreeHtmlCanvas({ variant = "detail" }: ThreeHtmlCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const sourceRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const source = sourceRef.current;
 
-    if (!canvas) {
+    if (!canvas || !source) {
       return;
     }
 
-    const { camera, flatMaterial, flatPlane, group3d, posterTexture, scene } = createScene();
-    const renderer = new THREE.WebGLRenderer({ alpha: false, antialias: true, canvas });
+    const width = Math.max(1, canvas.clientWidth || window.innerWidth);
+    const height = Math.max(1, canvas.clientHeight || window.innerHeight);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
+    const htmlCapture = new HtmlToCanvas(source, {
+      height,
+      pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+      width,
+    });
+    const { camera, projector, scene } = createScene(htmlCapture.texture, width, height);
     const runtime: Runtime = {
       animationFrame: 0,
       camera,
-      flatMaterial,
-      flatPlane,
-      group3d,
-      posterTexture,
+      htmlCapture,
+      projector,
       renderer,
       scene,
-      smoothProgress: variant === "preview" ? 0.42 : 0,
-      targetProgress: variant === "preview" ? 0.42 : 0,
-      viewDistance: 8,
+      smoothProgress: variant === "preview" ? 0.36 : 0,
+      targetProgress: variant === "preview" ? 0.36 : 0,
     };
 
-    renderer.setClearColor("#ffffff", 1);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.VSMShadowMap;
 
-    const updateProgress = () => {
+    const updateScrollProgress = () => {
       if (variant === "preview") {
         return;
       }
@@ -465,42 +568,50 @@ export function ThreeHtmlCanvas({ variant = "detail" }: ThreeHtmlCanvasProps) {
       }
 
       const rect = root.getBoundingClientRect();
-      const scrollable = Math.max(1, rect.height - window.innerHeight);
+      const range = Math.max(1, rect.height - window.innerHeight);
 
-      // 固定 canvas 不跟随 DOM 滚动，滚动量只作为 Three.js 时间轴输入。
-      runtime.targetProgress = clamp(-rect.top / scrollable);
+      // 与参考仓库一致：滚动只改变主相机，HTML 纹理投影相机固定在首屏视角。
+      runtime.targetProgress = clamp(-rect.top / range);
     };
 
     const resize = () => {
-      const width = Math.max(1, canvas.clientWidth || window.innerWidth);
-      const height = Math.max(1, canvas.clientHeight || window.innerHeight);
+      const nextWidth = Math.max(1, canvas.clientWidth || window.innerWidth);
+      const nextHeight = Math.max(1, canvas.clientHeight || window.innerHeight);
 
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      renderer.setSize(width, height, false);
-      fitFlatPlane(runtime, width, height);
-      updateProgress();
+      resizeRuntime(runtime, canvas, nextWidth, nextHeight);
+      updateScrollProgress();
     };
 
     const animate = (time: number) => {
       if (variant === "preview") {
-        runtime.targetProgress = 0.45 + Math.sin(time * 0.00045) * 0.14;
+        runtime.targetProgress = 0.32 + Math.sin(time * 0.00042) * 0.09;
       }
 
-      runtime.smoothProgress = lerp(runtime.smoothProgress, runtime.targetProgress, 0.09);
-      updateScene(runtime, runtime.smoothProgress, variant);
+      runtime.smoothProgress += (runtime.targetProgress - runtime.smoothProgress) * 0.08;
+      updateCamera(runtime, runtime.smoothProgress);
       renderer.render(scene, camera);
       runtime.animationFrame = requestAnimationFrame(animate);
     };
 
-    resize();
-    updateProgress();
+    const start = async () => {
+      if (document.fonts?.ready) {
+        await document.fonts.ready;
+      }
+
+      resize();
+      await htmlCapture.update();
+      updateCamera(runtime, runtime.smoothProgress);
+      renderer.render(scene, camera);
+      runtime.animationFrame = requestAnimationFrame(animate);
+    };
+
+    void start();
     window.addEventListener("resize", resize);
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    runtime.animationFrame = requestAnimationFrame(animate);
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
 
     return () => {
       window.removeEventListener("resize", resize);
-      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("scroll", updateScrollProgress);
       disposeRuntime(runtime);
     };
   }, [variant]);
@@ -508,18 +619,75 @@ export function ThreeHtmlCanvas({ variant = "detail" }: ThreeHtmlCanvasProps) {
   return (
     <div className={styles.effect} data-effect="three-html-canvas" data-variant={variant} ref={rootRef}>
       <canvas
-        aria-label="Scroll-driven Three.js scene turning a flat HTML poster into a red, white, and black 3D composition."
+        aria-label="Scroll-driven Three.js scene using a projected HTML canvas texture."
         className={variant === "detail" ? styles.detailCanvas : styles.previewCanvas}
         ref={canvasRef}
         role="img"
       />
-      <div aria-hidden="true" className={styles.sourceLayout}>
-        <p>SCROLL DOWN</p>
-        <h1>Designing Motion</h1>
-        <h2>Crafting Depth Into Living Worlds</h2>
-        <article>
-          <strong>Cullen Webber ™</strong>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+      <SourcePage ref={sourceRef} />
+    </div>
+  );
+}
+
+function SourcePage({ ref }: { ref: React.RefObject<HTMLDivElement | null> }) {
+  return (
+    <div aria-hidden="true" className={styles.sourceLayout} ref={ref}>
+      <div style={sourceShellStyle}>
+        <p
+          style={{
+            bottom: 16,
+            fontSize: 16,
+            fontWeight: 800,
+            left: "50%",
+            margin: 0,
+            position: "absolute",
+            transform: "translateX(-50%)",
+          }}
+        >
+          SCROLL DOWN
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(2rem, 5vw, 3.5rem)", maxWidth: 1120, width: "100%" }}>
+          <div style={{ alignSelf: "center", display: "flex", flexDirection: "column", maxWidth: 520, width: "48%" }}>
+            <h1 style={{ ...headingStyle, alignSelf: "flex-start" }}>Designing</h1>
+            <h2 style={{ ...headingStyle, alignSelf: "flex-end" }}>Motion</h2>
+          </div>
+          <div style={{ alignSelf: "flex-start", display: "flex", flexDirection: "column", maxWidth: 400, width: "40%" }}>
+            <h2 style={{ ...headingStyle, alignSelf: "flex-start" }}>Crafting</h2>
+            <h2 style={{ ...headingStyle, alignSelf: "flex-end" }}>Depth</h2>
+          </div>
+          <div style={{ alignSelf: "flex-end", display: "flex", flexDirection: "column", maxWidth: 410, width: "42%" }}>
+            <h2 style={{ ...headingStyle, alignSelf: "flex-start" }}>Into</h2>
+            <h2 style={{ ...headingStyle, alignSelf: "flex-end" }}>Living</h2>
+            <h2 style={{ ...headingStyle, alignSelf: "flex-start" }}>Worlds</h2>
+          </div>
+        </div>
+
+        <article
+          style={{
+            aspectRatio: "1",
+            background: "#fd453a",
+            color: "#222222",
+            display: "flex",
+            flexDirection: "column",
+            gap: "clamp(1rem, 3vw, 2rem)",
+            left: "50%",
+            padding: "clamp(1.5rem, 4vw, 2rem)",
+            position: "absolute",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "min(70vw, 400px)",
+          }}
+        >
+          <strong style={{ fontSize: "clamp(1.65rem, 4vw, 2rem)", fontWeight: 900, lineHeight: 1 }}>
+            Nicenonecb <sup style={{ fontSize: 12 }}>TM</sup>
+          </strong>
+          <p style={{ fontSize: "clamp(1rem, 2.3vw, 1.125rem)", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>
+            Interface surfaces become spatial material, letting scroll carve depth out of a living page.
+          </p>
+          <p style={{ fontSize: "clamp(0.8rem, 2vw, 1rem)", lineHeight: 1.35, margin: 0 }}>
+            HTML is captured once, projected through a camera, and revealed again as dimensional geometry.
+          </p>
         </article>
       </div>
     </div>
