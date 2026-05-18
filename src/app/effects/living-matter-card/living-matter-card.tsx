@@ -141,9 +141,9 @@ void main() {
   vec4 warpedPage = texture(uPageTexture, vec2(pageUv.x, 1.0 - pageUv.y));
   vec4 page = mix(basePage, warpedPage, 0.42 + melt * 0.24 + body * 0.12);
 
-  vec3 black = vec3(0.007, 0.011, 0.009);
-  float vignette = smoothstep(0.45, 1.55, length(p * vec2(0.76, 1.0)));
-  vec3 color = mix(vec3(0.022, 0.034, 0.03), black, vignette);
+  vec3 black = vec3(0.015, 0.022, 0.019);
+  float vignette = smoothstep(0.45, 1.65, length(p * vec2(0.76, 1.0)));
+  vec3 color = mix(vec3(0.034, 0.052, 0.046), black, vignette * 0.55);
 
   float mist = noise(uv * vec2(3.0, 2.2) + iTime * 0.06);
   float introVeil = (1.0 - intro) * (0.55 + mist * 0.3);
@@ -162,11 +162,12 @@ void main() {
 
   float pointerGlow = exp(-dot((uv - pointer) * vec2(iResolution.x / iResolution.y, 1.0), (uv - pointer) * vec2(iResolution.x / iResolution.y, 1.0)) * 8.0);
   color += vec3(0.48, 1.0, 0.82) * pointerGlow * hasPointer * (0.05 + melt * 0.06);
-  color = mix(color, vec3(0.018, 0.033, 0.03) + page.rgb * 0.12, reset * 0.82);
+  /* melt 结束后渐变回可读页面，不再暗黑重置 */
+  color = mix(color, page.rgb, reset * 0.48);
 
   float grain = hash12(fragCoord + iTime * 35.0) - 0.5;
   color += grain * 0.045;
-  color *= 1.0 - vignette * 0.22;
+  color *= 1.0 - vignette * 0.06;
 
   fragColor = vec4(color, 1.0);
 }
@@ -479,6 +480,7 @@ export function LivingMatterCard({ variant = "detail" }: LivingMatterCardProps) 
   const elapsedRef = useRef(0);
   const textureDirtyRef = useRef(true);
   const timelineJumpRef = useRef<number | null>(null);
+  const lastTriggerRef = useRef(0);
   const pointerRef = useRef<PointerState>({
     initialized: false,
     targetX: offscreenPointer,
@@ -597,6 +599,18 @@ export function LivingMatterCard({ variant = "detail" }: LivingMatterCardProps) 
     [updatePointer],
   );
 
+  /* 统一的 melt 触发：点击或键盘 Space/Enter，带 1.2s 冷却防连点 */
+  const triggerMelt = useCallback(() => {
+    const now = performance.now();
+
+    if (now - lastTriggerRef.current < 1200) {
+      return;
+    }
+
+    lastTriggerRef.current = now;
+    timelineJumpRef.current = 7.08;
+  }, []);
+
   const handlePointerDown = useCallback(
     (event: PointerEvent<HTMLElement>) => {
       event.currentTarget.setPointerCapture(event.pointerId);
@@ -607,13 +621,19 @@ export function LivingMatterCard({ variant = "detail" }: LivingMatterCardProps) 
         return;
       }
 
-      const loopTime = elapsedRef.current % 12;
+      triggerMelt();
+    },
+    [updatePointer, triggerMelt],
+  );
 
-      if (loopTime < 7 || loopTime > 10.4) {
-        timelineJumpRef.current = 7.08;
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      if (event.key === " " || event.key === "Enter") {
+        event.preventDefault();
+        triggerMelt();
       }
     },
-    [updatePointer],
+    [triggerMelt],
   );
 
   const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -769,6 +789,7 @@ export function LivingMatterCard({ variant = "detail" }: LivingMatterCardProps) 
       className={styles.shell}
       data-effect="living-matter-card"
       data-variant={variant}
+      onKeyDown={handleKeyDown}
       onPointerCancel={hidePointer}
       onPointerDown={handlePointerDown}
       onPointerLeave={hidePointer}
