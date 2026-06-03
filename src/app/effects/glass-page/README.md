@@ -8,6 +8,10 @@ glass-page / Fragmented Liquid Glass Stage
 
 一个黑场玻璃碎片舞台。页面背后有巨型文字和冷暖光带，前景用 Three.js 生成多块不规则玻璃碎片。碎片会随时间轻微漂移，并在指针靠近时向外扩散、折射背景、拉出青红色散边缘。
 
+## 参考来源
+
+- liquid-glass-paralax
+
 ## 实现原理
 
 - 用 CanvasTexture 绘制背后的文字、光带和暗色背景，再把它放到 Three.js 场景深处。

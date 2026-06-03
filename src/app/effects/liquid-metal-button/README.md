@@ -1,6 +1,6 @@
 # Liquid Metal Button
 
-Reference: <https://codepen.io/Majoramari/pen/pvbzpoa>
+Reference: Muhannad Hassan's Liquid metal button, <https://codepen.io/Majoramari/pen/pvbzpoa>
 
 The original pen uses `@paper-design/shaders` to mount a liquid metal shader into a circular button. This local version keeps the same composition:
 

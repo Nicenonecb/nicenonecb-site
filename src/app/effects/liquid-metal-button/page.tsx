@@ -6,7 +6,7 @@ import { LiquidMetalButton } from "./liquid-metal-button";
 export const metadata: Metadata = {
   title: "Liquid Metal Button Effect | Nicenonecb",
   description:
-    "A WebGL2 liquid metal button inspired by Muhannad Hassan's CodePen, with a chrome shader, capsule track, and tonal metal hover ring.",
+    "A WebGL2 liquid metal button with a chrome shader, capsule track, and tonal metal hover ring.",
 };
 
 export default function LiquidMetalButtonEffectPage() {

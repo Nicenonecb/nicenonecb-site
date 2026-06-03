@@ -1,7 +1,3 @@
-.detailPage {
-  background: #ffffff;
-}
-
 .backLinkLayer {
   position: fixed;
   top: 1rem;
@@ -13,7 +9,6 @@
   position: relative;
   min-height: 100svh;
   overflow: clip;
-  background: #ffffff;
 }
 
 .effect[data-variant="detail"] {

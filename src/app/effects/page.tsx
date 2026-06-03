@@ -24,7 +24,7 @@ const effects = [
     index: "01",
     name: "GLASS PAGE",
     summary:
-      "参考 liquid-glass-paralax 的黑场碎片舞台：巨型文字在玻璃层后方漂移，碎片随指针折射、外扩并拉出冷暖色散边。",
+      "黑场碎片舞台里，巨型文字在玻璃层后方漂移，碎片随指针折射、外扩并拉出冷暖色散边。",
     stack: ["Three.js", "MeshPhysicalMaterial"],
     preview: <GlassPage variant="preview" />,
   },
@@ -38,38 +38,38 @@ const effects = [
     preview: <ScrambleTextLab variant="preview" />,
   },
   {
-    href: "/effects/magnetic-nav",
+    href: "/effects/tearable-ui",
     index: "03",
-    name: "Magnetic Nav",
+    name: "Tearable UI",
     summary:
-      "参考 Jhey 的 magnetic nav link：用 :has() 选中 hover/focus 链接，并通过 CSS Anchor Positioning 或测量回退让高亮层吸附到目标尺寸。",
-    stack: ["CSS :has()", "Anchor Positioning", "ResizeObserver fallback", "Focus states"],
-    preview: <MagneticNav variant="preview" />,
+      "页面内容先绘制成 canvas 纹理，再贴到可变形 cloth 网格；拖拽拉伸会断开约束并重建三角索引，露出下一层页面。",
+    stack: ["React Three Fiber", "CanvasTexture", "Verlet cloth worker", "Triangle index tearing"],
+    preview: <TearableUi variant="preview" />,
   },
   {
     href: "/effects/liquid-layers-draw",
     index: "04",
     name: "Liquid Layers",
     summary:
-      "参考 grantkot.com/ll 默认效果：黑场底部四色液体层，按住拖拽时形成厚边界、空腔、液柱和回流。",
+      "黑场底部铺开四色液体层，按住拖拽时形成厚边界、空腔、液柱和回流。",
     stack: ["PVFS WASM", "WebGL points", "Pointer velocity", "Position fluid"],
     preview: <LiquidLayersDraw variant="preview" />,
   },
   {
-    href: "/effects/tearable-ui",
+    href: "/effects/magnetic-nav",
     index: "05",
-    name: "Tearable UI",
+    name: "Magnetic Nav",
     summary:
-      "参考 pushmatrix tearable：页面内容先绘制成 canvas 纹理，再贴到可变形 cloth 网格；拖拽拉伸会断开约束并重建三角索引，露出下一层页面。",
-    stack: ["React Three Fiber", "CanvasTexture", "Verlet cloth worker", "Triangle index tearing"],
-    preview: <TearableUi variant="preview" />,
+      "用 :has() 选中 hover/focus 链接，并通过 CSS Anchor Positioning 或测量回退让高亮层吸附到目标尺寸。",
+    stack: ["CSS :has()", "Anchor Positioning", "ResizeObserver fallback", "Focus states"],
+    preview: <MagneticNav variant="preview" />,
   },
   {
     href: "/effects/procedural-computer",
     index: "06",
     name: "Procedural Computer",
     summary:
-      "拆解 procedural.computer 的背景特效：WebGL2 中三组旋转椭圆环被 smooth-min 融合，指针生成横竖细线，滚轮与明暗/浮雕 uniform 平滑过渡。",
+      "WebGL2 中三组旋转椭圆环被 smooth-min 融合，指针生成横竖细线，滚轮与明暗/浮雕 uniform 平滑过渡。",
     stack: ["WebGL2", "SDF rings", "Pointer crosshair", "Scroll phase", "Emboss shader"],
     preview: <ProceduralComputer variant="preview" />,
   },
@@ -78,7 +78,7 @@ const effects = [
     index: "07",
     name: "Hex Path",
     summary:
-      "参考 shaders.com 的 Hex Path 1：黑蓝径向背景、稀疏六边形路径、青蓝霓虹辉光、film grain，以及随鼠标移动强化的亮光路径。",
+      "黑蓝径向背景叠加稀疏六边形路径、青蓝霓虹辉光、film grain，以及随鼠标移动强化的亮光路径。",
     stack: ["WebGL2", "Hex SDF", "Pointer glow", "Chroma flow", "Film grain"],
     preview: <HexPathCard variant="preview" />,
   },
@@ -87,7 +87,7 @@ const effects = [
     index: "08",
     name: "Living Matter",
     summary:
-      "参考 X 视频的 metaball 网页转场：HTML-like 页面先绘入 canvas texture，再由 WebGL2 体积 blob 做折射、显现、吞没和 start 回环。",
+      "HTML-like 页面先绘入 canvas texture，再由 WebGL2 体积 blob 做折射、显现、吞没和 start 回环。",
     stack: ["HTML-in-canvas", "WebGL2", "Metaball SDF", "Texture refraction", "Live input"],
     preview: <LivingMatterCard variant="preview" />,
   },
@@ -96,7 +96,7 @@ const effects = [
     index: "09",
     name: "Quantum Neural Network",
     summary:
-      "参考 VoXelo 的 CodePen：黑场星云中漂浮的 3D 神经网络，玻璃控制面板切换主题、密度和结构，点击会向节点连线发送能量脉冲。",
+      "黑场星云中漂浮的 3D 神经网络，玻璃控制面板切换主题、密度和结构，点击会向节点连线发送能量脉冲。",
     stack: ["Three.js", "OrbitControls", "UnrealBloomPass", "ShaderMaterial", "Energy pulses"],
     preview: <QuantumNeuralNetwork variant="preview" />,
   },
@@ -105,7 +105,7 @@ const effects = [
     index: "10",
     name: "Liquid Metal Button",
     summary:
-      "参考 Muhannad Hassan 的 Liquid metal button：黑色胶囊轨道承载灰色图标与圆形金属按钮，hover/focus 时 WebGL 液态高光与同色系金属圆环一起被激活。",
+      "黑色胶囊轨道承载灰色图标与圆形金属按钮，hover/focus 时 WebGL 液态高光与同色系金属圆环一起被激活。",
     stack: ["WebGL2", "CSS masks", "Pointer easing", "Chrome hover ring", "Accessible button"],
     preview: <LiquidMetalButton variant="preview" />,
   },
@@ -114,7 +114,7 @@ const effects = [
     index: "11",
     name: "Charging Sparks",
     summary:
-      "参考 damotime 视频的 PopcornFX idle：黑灰舞台中央的白热能量核持续搓动，按品红、黄绿、蓝青相位爆出胶囊粒子、弯曲光带和长斜向光刺。",
+      "黑灰舞台中央的白热能量核持续搓动，按品红、黄绿、蓝青相位爆出胶囊粒子、弯曲光带和长斜向光刺。",
     stack: ["Canvas 2D", "Energy field", "Additive glow", "Halftone haze", "Video study"],
     preview: <ChargingSparks variant="preview" />,
   },
@@ -123,8 +123,8 @@ const effects = [
     index: "12",
     name: "Reflective Signal",
     summary:
-      "分析 React Bits 后抽取 spotlight、reflective sheen 和 tilt 的核心交互，改造成黑场荧光个人站风格的可点击特效卡片。",
-    stack: ["React Bits study", "Pointer CSS vars", "3D tilt", "Reflective sheen", "Focus states"],
+      "抽取 spotlight、reflective sheen 和 tilt 的核心交互，改造成黑场荧光个人站风格的可点击特效卡片。",
+    stack: ["Pointer CSS vars", "3D tilt", "Reflective sheen", "Focus states"],
     preview: <ReflectiveSignalCard variant="preview" />,
   },
   {
@@ -132,7 +132,7 @@ const effects = [
     index: "13",
     name: "Three HTML Canvas",
     summary:
-      "参考 Cullen Webber 的 three-html-to-canvas：白底巨型 HTML 海报被绘成 canvas 纹理，滚动后在 Three.js 中变成红白黑的拱门、柱体、球体和透视文字舞台。",
+      "白底巨型 HTML 海报被绘成 canvas 纹理，滚动后在 Three.js 中变成红白黑的拱门、柱体、球体和透视文字舞台。",
     stack: ["Three.js", "CanvasTexture", "Scroll timeline", "3D typography planes", "Sticky WebGL"],
     preview: <ThreeHtmlCanvas variant="preview" />,
   },
