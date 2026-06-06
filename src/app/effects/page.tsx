@@ -9,6 +9,7 @@ import { MagneticNav } from "./magnetic-nav/magnetic-nav";
 import { ProceduralComputer } from "./procedural-computer/procedural-computer";
 import { QuantumNeuralNetwork } from "./quantum-neural-network/quantum-neural-network";
 import { ReflectiveSignalCard } from "./reflective-signal-card/reflective-signal-card";
+import { RecursiveCellularHero } from "./recursive-cellular-hero/recursive-cellular-hero";
 import { ScrambleTextLab } from "./scramble-text-lab/scramble-text-lab";
 import { TearableUi } from "./tearable-ui/tearable-ui";
 import { ChargingSparks } from "./charging-sparks/charging-sparks";
@@ -135,6 +136,15 @@ const effects = [
       "白底巨型 HTML 海报被绘成 canvas 纹理，滚动后在 Three.js 中变成红白黑的拱门、柱体、球体和透视文字舞台。",
     stack: ["Three.js", "CanvasTexture", "Scroll timeline", "3D typography planes", "Sticky WebGL"],
     preview: <ThreeHtmlCanvas variant="preview" />,
+  },
+  {
+    href: "/effects/recursive-cellular-hero",
+    index: "14",
+    name: "Recursive Cellular Hero",
+    summary:
+      "居中的橙色细胞格沿 19x19 邻接图扩散，填满后被指数缩放压回中心，再从同一点递归长出下一层。",
+    stack: ["Canvas 2D", "Recursive zoom", "Grid growth agents", "Seeded textures", "Reduced motion"],
+    preview: <RecursiveCellularHero variant="preview" />,
   },
 ];
 
