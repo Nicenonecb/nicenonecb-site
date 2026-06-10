@@ -11,6 +11,12 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    slug: "cool-codex-mac-heat",
+    title: "别迷信大模型：Codex 也能把 Mac 推到 98°C",
+    description: "复盘 Cool Codex 如何用进程分类与安全清理治理 AI Agent 本地副作用。",
+    file: "cool-codex-mac-heat.md",
+  },
+  {
     slug: "deepseek-v4-litekv",
     title: "DeepSeek-V4 注意力机制与 LiteKV 验证",
     description: "用可运行实验拆解 CSA、HCA 与 NSA-lite 的长上下文成本权衡。",

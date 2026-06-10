@@ -58,7 +58,7 @@ export const copy = {
     work: {
       eyebrow: "Selected Work",
       title: "End-to-end project experience",
-      count: "004 entries",
+      count: "005 entries",
       pendingDialog: {
         eyebrow: "Project status",
         title: "In development...",
@@ -67,6 +67,14 @@ export const copy = {
         close: "Close",
       },
       items: [
+        {
+          name: "Cool Codex",
+          type: "AI Agent Reliability",
+          description:
+            "A macOS CLI that classifies Codex and agent-browser Chrome processes, then cools down runaway local automation without killing normal tabs.",
+          stack: "Bash, macOS, Chrome for Testing, process classification",
+          href: "https://github.com/Nicenonecb/cool-codex",
+        },
         {
           name: "LiteKV",
           type: "AI Infrastructure",
@@ -103,6 +111,10 @@ export const copy = {
       eyebrow: "Writing",
       title: "Technical notes with working evidence",
       posts: [
+        {
+          href: "/writing/cool-codex-mac-heat",
+          title: "Cool Codex: taming AI Agent Chrome leftovers on macOS",
+        },
         {
           href: "/writing/deepseek-v4-litekv",
           title: "DeepSeek-V4 attention mechanics and LiteKV validation",
@@ -164,7 +176,7 @@ export const copy = {
     work: {
       eyebrow: "项目经历",
       title: "完整项目经验",
-      count: "004 entries",
+      count: "005 entries",
       pendingDialog: {
         eyebrow: "项目状态",
         title: "正在研发中...",
@@ -172,6 +184,14 @@ export const copy = {
         close: "关闭",
       },
       items: [
+        {
+          name: "Cool Codex",
+          type: "AI Agent 可靠性",
+          description:
+            "面向 Codex 重度会话的 macOS 降温 CLI，基于完整命令行区分自动化 Chrome 与普通标签页，安全清理残留进程。",
+          stack: "Bash、macOS、Chrome for Testing、进程分类",
+          href: "https://github.com/Nicenonecb/cool-codex",
+        },
         {
           name: "LiteKV",
           type: "AI 应用基建",
@@ -208,6 +228,10 @@ export const copy = {
       eyebrow: "技术文章",
       title: "对技术的一些思考",
       posts: [
+        {
+          href: "/writing/cool-codex-mac-heat",
+          title: "别迷信大模型：Codex 也能把 Mac 推到 98°C",
+        },
         {
           href: "/writing/deepseek-v4-litekv",
           title: "DeepSeek-V4 注意力机制与 LiteKV 验证",

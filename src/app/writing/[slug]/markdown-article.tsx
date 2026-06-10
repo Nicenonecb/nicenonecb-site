@@ -6,6 +6,7 @@ type Block =
   | { code: string; language: string; type: "code" }
   | { level: number; text: string; type: "heading" }
   | { alt: string; src: string; type: "image" }
+  | { text: string; type: "quote" }
   | { rows: string[][]; type: "table" }
   | { items: string[]; ordered: boolean; type: "list" }
   | { text: string; type: "paragraph" };
@@ -19,6 +20,10 @@ const articleImageSizes: Record<string, { height: number; width: number }> = {
   "/articles/deepseek-v4-litekv/image6.png": { height: 720, width: 1120 },
   "/articles/deepseek-v4-litekv/image7.png": { height: 672, width: 1600 },
   "/articles/deepseek-v4-litekv/image8.png": { height: 720, width: 1120 },
+  "/articles/cool-codex-mac-heat/image1.png": { height: 720, width: 1200 },
+  "/articles/cool-codex-mac-heat/image2.png": { height: 720, width: 1200 },
+  "/articles/cool-codex-mac-heat/image3.png": { height: 720, width: 1200 },
+  "/articles/cool-codex-mac-heat/image4.png": { height: 720, width: 1200 },
 };
 
 function parseMarkdown(markdown: string) {
@@ -47,6 +52,18 @@ function parseMarkdown(markdown: string) {
 
       blocks.push({ code: codeLines.join("\n"), language, type: "code" });
       index += 1;
+      continue;
+    }
+
+    if (trimmed.startsWith(">")) {
+      const quoteLines: string[] = [];
+
+      while (index < lines.length && lines[index].trim().startsWith(">")) {
+        quoteLines.push(lines[index].trim().replace(/^>\s?/, ""));
+        index += 1;
+      }
+
+      blocks.push({ text: quoteLines.join(" "), type: "quote" });
       continue;
     }
 
@@ -120,6 +137,7 @@ function parseMarkdown(markdown: string) {
         !nextLine ||
         nextLine.startsWith("#") ||
         nextLine.startsWith("```") ||
+        nextLine.startsWith(">") ||
         nextLine.startsWith("![") ||
         nextLine.match(/^(-|\d+\.)\s+/) ||
         (nextLine.includes("|") && lines[index + 1]?.trim().match(/^\|?\s*:?-{3,}/));
@@ -244,6 +262,17 @@ export function MarkdownArticle({ markdown }: { markdown: string }) {
                 {block.alt}
               </figcaption>
             </figure>
+          );
+        }
+
+        if (block.type === "quote") {
+          return (
+            <blockquote
+              className="border-l-2 border-emerald-300/70 bg-emerald-300/5 px-5 py-4 text-zinc-300"
+              key={index}
+            >
+              {renderInline(block.text)}
+            </blockquote>
           );
         }
 
